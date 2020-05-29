@@ -71,9 +71,20 @@ def rerun_word_freq():
     print('Done')
 
 
+def run_sql():
+
+    sql = input('SQL: ')
+
+    conn = db_operations.db_connect()
+    data = db_operations.execute_sql(conn, sql)
+    db_operations.db_close(conn)
+
+    print(data)
+
+
 if __name__ == '__main__':
 
-    helptxt = 'Options: screen-dump, csv-words-dump, erase-db, rerun-word-freq'
+    helptxt = 'Options: screen-dump, csv-words-dump, erase-db, rerun-word-freq, run-sql'
 
     if len(sys.argv) != 2:
         print(helptxt)
@@ -90,6 +101,9 @@ if __name__ == '__main__':
 
     elif sys.argv[1] == 'rerun-word-freq':
         rerun_word_freq()
+
+    elif sys.argv[1] == 'run-sql':
+        run_sql()
 
     else:
         print(helptxt)
