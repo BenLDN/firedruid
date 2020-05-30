@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block page_title %}Words Page{% endblock %}
+{% block page_title %}Top words in the Last Seven Days{% endblock %}
 {% block body %}
 
 <head>
@@ -11,34 +11,35 @@
 </head>
 
 <canvas id="myChart" width="600" height="400"></canvas>
-<p id="caption">Top words in the Last Seven Days</p>
 
 <script>
       // Global parameters:
       // do not resize the chart canvas when its container does (keep at 600x400px)
       Chart.defaults.global.responsive = false;
+      Chart.defaults.global.legend.display = false;
 
       // define the chart data
       var chartData = {
-        labels : [{% for item in labels %}
-                   "{{item}}",
+
+        labels : [{% for label in labels %}
+                   "{{label}}",
                   {% endfor %}],
         datasets : [{
-            label: '{{ legend }}',
+
             fill: true,
             lineTension: 0.1,
-            backgroundColor: "rgba(75,192,192,0.4)",
-            borderColor: "rgba(75,192,192,1)",
+            backgroundColor: "#4582EC",
+            borderColor: "#4582EC",
             borderCapStyle: 'butt',
             borderDash: [],
             borderDashOffset: 0.0,
             borderJoinStyle: 'miter',
-            pointBorderColor: "rgba(75,192,192,1)",
+            pointBorderColor: "#4582EC",
             pointBackgroundColor: "#fff",
             pointBorderWidth: 1,
             pointHoverRadius: 5,
-            pointHoverBackgroundColor: "rgba(75,192,192,1)",
-            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBackgroundColor: "#4582EC",
+            pointHoverBorderColor: "#4582EC",
             pointHoverBorderWidth: 2,
             pointRadius: 1,
             pointHitRadius: 10,
@@ -46,7 +47,9 @@
                       {{item}},
                     {% endfor %}],
             spanGaps: false
-        }]
+        }
+
+        ]
       }
 
       // get chart canvas
@@ -56,6 +59,24 @@
       var myChart = new Chart(ctx, {
         type: 'bar',
         data: chartData,
+
+        options: {
+        scales: {
+            
+            yAxes: [{
+            ticks: {
+            
+                   min: 0,
+                   callback: function(value){return value.toFixed(2)+ "%"}
+                },  
+                scaleLabel: {
+                   display: true,
+                   labelString: "Word Frequency"
+                }
+            }]
+        }
+    }
+
       });
     </script>
 

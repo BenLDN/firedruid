@@ -1,8 +1,16 @@
 {% extends "layout.html" %}
-{% block page_title %}What is this Website?{% endblock %}
+{% block page_title %}What is Minerva?{% endblock %}
 {% block body %}
     {{ super() }}
-    <p>WIP</p>
-    <img src="{{ url_for('static', filename='img/minerva.png') }}">
+    <p>Work in Progress</p>
+    <p>Minerva does the following: </p>
+    <ul>
+      	<li>Scrape titles of all front page articles of the top 10 UK Newspapers*</li>
+      	<li>Find the most common words in the titles</li>
+      	<li>Exclude words that are common in the English language (e.g. "is", "the", "had")</li>
+    	<li>Visualise word frequency trends</li>
+    </ul>
+    <img src="{{ url_for('static', filename='img/minerva.png') }}" style="width: 25%; height: 50%">
+    <p><i>*:BBC, The Guardian, The Independent, The Telegraph, Daily Mail, The Sun, Mirror Online, Express</i>></p>
     
 {% endblock %}

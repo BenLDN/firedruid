@@ -65,7 +65,9 @@ def top_words_daily(how_many):
 
     df = df.iloc[:how_many,:-1]
 
-    dates = list(df.columns)
+    datetimes = list(df.columns)
+
+    dates = [str(datetime)[:10] for datetime in datetimes]
 
     words = list(df.index)
 

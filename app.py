@@ -19,20 +19,19 @@ def public():
 
 @app.route("/top-words-7d/")
 def top_words_7d():
-    legend = 'Most common words in the last seven days'
     top_words = db_reader.top_words_7d()
     labels = list(top_words.index)
-    values = list(top_words)
+    values = map(lambda x: x * 100, list(top_words))
     return render_template("top_words_7d.html",
                            values=values,
-                           labels=labels,
-                           legend=legend)
+                           labels=labels)
 
 
 @app.route("/top-words-trend/")
 def top_words_trend():
     how_many = 5
     dates, wordlist, valuelist = db_reader.top_words_daily(how_many)
+    valuelist = [list(map(lambda x: x * 100, list(values))) for values in valuelist]
     return render_template("top_words_trend.html",
                            wordlist_valuelist_colourlist=zip(wordlist, valuelist, colourlist),
                            labels=dates,
