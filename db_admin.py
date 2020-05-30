@@ -84,7 +84,13 @@ def run_sql():
 
 if __name__ == '__main__':
 
-    helptxt = 'Options: screen-dump, csv-words-dump, erase-db, rerun-word-freq, run-sql'
+    helptxt = '''Options:
+
+                 screen-dump,
+                 csv-words-dump,
+                 erase-db,
+                 rerun-word-freq,
+                 run-sql'''
 
     if len(sys.argv) != 2:
         print(helptxt)

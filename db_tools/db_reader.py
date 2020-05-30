@@ -53,17 +53,21 @@ def top_words_daily(how_many):
 
     site_num = len(df.groupby(['site']))
 
-    df = pd.pivot_table(df, index = ['word'], columns = ['dt'], values = 'freq', aggfunc = np.sum)
+    df = pd.pivot_table(df,
+                        index=['word'],
+                        columns=['dt'],
+                        values='freq',
+                        aggfunc=np.sum)
 
     df = df / site_num
 
     df = df.fillna(0)
 
-    df['total'] = df.sum(axis = 1)
+    df['total'] = df.sum(axis=1)
 
-    df = df.sort_values(by = 'total', ascending = False)
+    df = df.sort_values(by='total', ascending=False)
 
-    df = df.iloc[:how_many,:-1]
+    df = df.iloc[:how_many, :-1]
 
     datetimes = list(df.columns)
 
@@ -74,6 +78,6 @@ def top_words_daily(how_many):
     value_list = []
 
     for i in range(0, how_many):
-      value_list.append(df.iloc[i,:].tolist())
+        value_list.append(df.iloc[i, :].tolist())
 
     return dates, words, value_list
