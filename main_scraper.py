@@ -19,10 +19,11 @@ def scrape_all_sites():
     conn = db_operations.db_connect()
     scrape_keys = []
 
+    day = datetime.now().strftime("%Y-%m-%d")
+    time = datetime.now().strftime("%H:%M")
+
     for site in news_sites:
         site_name = site['name']
-        day = datetime.now().strftime("%Y-%m-%d")
-        time = datetime.now().strftime("%H:%M")
 
         scrape_key = db_operations.insert_scrape(conn, [site_name, day, time])
         scrape_keys.append(scrape_key)
@@ -41,4 +42,4 @@ if __name__ == '__main__':
     scrape_keys = scrape_all_sites()
 
     for scrape_key in scrape_keys:
-        word_frequencies.db_titles_to_top_words(scrape_key, 10)
+        word_frequencies.db_titles_to_top_words(scrape_key, 20)

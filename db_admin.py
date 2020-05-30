@@ -66,7 +66,7 @@ def rerun_word_freq():
     db_operations.db_close(conn)
 
     for scrape_key in scrape_keys:
-        word_frequencies.db_titles_to_top_words(scrape_key[0], 10)
+        word_frequencies.db_titles_to_top_words(scrape_key[0], 20)
 
     print('Done')
 
