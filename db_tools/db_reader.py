@@ -47,7 +47,7 @@ def top_words_7d():
     return df
 
 
-def top_words_daily():
+def top_words_daily(how_many):
 
     df = read_all()
 
@@ -63,16 +63,15 @@ def top_words_daily():
 
     df = df.sort_values(by = 'total', ascending = False)
 
-    df = df.iloc[:5,:-1]
+    df = df.iloc[:how_many,:-1]
 
     dates = list(df.columns)
 
     words = list(df.index)
 
-    s1 = df.iloc[0,:].tolist()
-    s2 = df.iloc[1,:].tolist()
-    s3 = df.iloc[2,:].tolist()
-    s4 = df.iloc[3,:].tolist()
-    s5 = df.iloc[4,:].tolist()
+    value_list = []
 
-    return dates, words, s1, s2, s3, s4, s5
+    for i in range(0, how_many):
+      value_list.append(df.iloc[i,:].tolist())
+
+    return dates, words, value_list
