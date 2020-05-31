@@ -2,5 +2,5 @@ old
 venv
 *.db
 *.csv
-*.ipynb
+*ipynb*
 **/__pycache__
