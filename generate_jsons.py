@@ -49,7 +49,49 @@ news_sites = [
         'link': 'https://www.express.co.uk',
         'rules': [['h2', 0],
                   ['h4', 0]]
-    }
+    },
+
+    {
+        'link': 'https://www.standard.co.uk/',
+        'name': 'standard',
+        'rules': [['div', {'class': 'headline'}], ['h2', 0]]
+    },
+
+    {
+        'link': 'https://www.dailystar.co.uk/',
+        'name': 'star',
+        'rules': [['a', {'class': 'headline'}]]
+    },
+
+    {
+        'link': 'https://metro.co.uk/',
+        'name': 'metro',
+        'rules': [['h3', 0]]
+    },
+
+    {
+        'link': 'https://www.thetimes.co.uk/',
+        'name': 'times',
+        'rules': [['h3', 0]]
+    },
+
+    {
+        'link': 'https://www.theweek.co.uk/',
+        'name': 'week',
+        'rules': [['h3', 0]]
+    },
+
+    {
+        'link': 'https://www.ft.com/',
+        'name': 'ft',
+        'rules': [['a', {'class': 'js-teaser-heading-link'}]]
+    },
+
+    {
+        'link': 'https://inews.co.uk/',
+        'name': 'inews',
+        'rules': [['h2', 0]]
+    }    
     ]
 
 exclude_words = ['the', 'be', 'is', 'am', 'are', 'was',
