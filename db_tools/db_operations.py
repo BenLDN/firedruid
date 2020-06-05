@@ -1,8 +1,13 @@
 import sqlite3
 
 
-def db_connect():
-    return sqlite3.connect('scraper.db')
+def db_connect(db='raw'):
+    if db == 'raw':
+        return sqlite3.connect('raw_data.db')
+    elif db == 'processed':
+        return sqlite3.connect('processed_data.db')
+    else:
+        pass
 
 
 def db_close(conn):
@@ -36,11 +41,13 @@ def create_words_table(conn):
     c.execute('DROP TABLE IF EXISTS words')
     c.execute('''CREATE TABLE words
              (pk_words INTEGER PRIMARY KEY AUTOINCREMENT,
-              fk_scrapes INTEGER,
+              scrape_key INTEGER,
+              site TEXT,
+              day TEXT,
+              hour TEXT,
               word TEXT,
               pctg REAL,
-              rank INTEGER,
-              FOREIGN KEY (fk_scrapes) REFERENCES scrapes (pk_scrapes))''')
+              rank INTEGER)''')
     c.close()
 
 
@@ -66,17 +73,20 @@ def insert_titles(conn, title_list, scrape_key):
     c.close()
 
 
-def insert_words(conn, words_tup_list, scrape_key):
+def insert_words(conn, words_tup_list, scrape_key, site, day, hour):
     c = conn.cursor()
     rows = []
     for words_tup in words_tup_list:
         rows.append((None,
                      scrape_key,
+                     site,
+                     day,
+                     hour,
                      words_tup[0],
                      words_tup[1],
                      words_tup[2]))
 
-    c.executemany('INSERT INTO words VALUES (?, ?, ?, ?, ?)', rows)
+    c.executemany('INSERT INTO words VALUES (?, ?, ?, ?, ?, ?, ?, ?)', rows)
 
     conn.commit()
     c.close()

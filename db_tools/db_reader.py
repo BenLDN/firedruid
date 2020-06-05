@@ -5,19 +5,16 @@ import db_tools.db_operations as db_operations
 
 
 def read_all():
-    conn = db_operations.db_connect()
 
-    sql = '''SELECT *
-             FROM words w
-             LEFT JOIN scrapes s
-             ON w.fk_scrapes = s.pk_scrapes'''
+    conn = db_operations.db_connect('processed')
+
+    sql = '''SELECT * FROM words'''
 
     top_words = db_operations.execute_sql(conn, sql)
 
     df = pd.DataFrame(top_words,
-                      columns=['key1', 'key2', 'word',
-                               'freq', 'rank', 'key3',
-                               'site', 'dt', 'tm'])
+                      columns=['key1', 'key2', 'site', 'dt',
+                               'tm', 'word', 'freq', 'rank'])
 
     df['dt'] = pd.to_datetime(df['dt'])
 

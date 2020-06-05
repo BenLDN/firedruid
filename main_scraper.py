@@ -18,15 +18,21 @@ def scrape_all_sites():
     news_sites = read_news_site_list()
     conn = db_operations.db_connect()
     scrape_keys = []
+    sites = []
+    days = []
+    hours = []
 
     day = datetime.now().strftime("%Y-%m-%d")
-    time = datetime.now().strftime("%H:%M")
+    hour = datetime.now().strftime("%H:%M")
 
     for site in news_sites:
         site_name = site['name']
 
-        scrape_key = db_operations.insert_scrape(conn, [site_name, day, time])
+        scrape_key = db_operations.insert_scrape(conn, [site_name, day, hour])
         scrape_keys.append(scrape_key)
+        sites.append(site_name)
+        days.append(day)
+        hours.append(hour)
 
         title_list = title_list_scraper.get_title_list_from_site(site)
 
@@ -34,12 +40,16 @@ def scrape_all_sites():
 
     db_operations.db_close(conn)
 
-    return scrape_keys
+    return scrape_keys, sites, days, hours
 
 
 if __name__ == '__main__':
 
-    scrape_keys = scrape_all_sites()
+    scrape_keys, sites, days, hours = scrape_all_sites()
 
-    for scrape_key in scrape_keys:
-        word_frequencies.db_titles_to_top_words(scrape_key, 20)
+    for (scrape_key, site, day, hour) in zip(scrape_keys, sites, days, hours):
+        word_frequencies.db_titles_to_top_words(scrape_key,
+                                                site,
+                                                day,
+                                                hour,
+                                                20)

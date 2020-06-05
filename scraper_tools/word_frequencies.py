@@ -14,7 +14,7 @@ def read_excluded_words():
 
 
 def db_read_site_titles(scrape_key):
-    conn = db_operations.db_connect()
+    conn = db_operations.db_connect('raw')
 
     raw_titles = db_operations.execute_sql(conn, 'SELECT * FROM titles')
     site_titles = [title_item[2]
@@ -80,8 +80,13 @@ def words_tuple_list_from_scrape(scrape_key, word_count):
     return add_rank(word_freq_pctg_top)
 
 
-def db_titles_to_top_words(scrape_key, word_count):
+def db_titles_to_top_words(scrape_key, site, day, hour, word_count):
     words_tuple_list = words_tuple_list_from_scrape(scrape_key, word_count)
-    conn = db_operations.db_connect()
-    db_operations.insert_words(conn, words_tuple_list, scrape_key)
+    conn = db_operations.db_connect('processed')
+    db_operations.insert_words(conn,
+                               words_tuple_list,
+                               scrape_key,
+                               site,
+                               day,
+                               hour)
     db_operations.db_close(conn)
