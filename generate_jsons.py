@@ -91,7 +91,7 @@ news_sites = [
         'link': 'https://inews.co.uk/',
         'name': 'inews',
         'rules': [['h2', 0]]
-    }    
+    }
     ]
 
 exclude_words = ['the', 'be', 'is', 'am', 'are', 'was',
