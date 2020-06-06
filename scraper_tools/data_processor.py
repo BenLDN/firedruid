@@ -37,9 +37,9 @@ def word_freq_from_list(title_list):
     return Counter(title_words_lemmatised)
 
 
-def word_freq_cleaner(raw_freq, exclude_words, min_word_length):
+def word_freq_filter(raw_freq, exclude_words, min_word_length):
     word_freq_cleaned = {word: freq for word, freq in raw_freq.items()
-                         if len(word) >= 3 and
+                         if len(word) >= min_word_length and
                          word not in exclude_words}
 
     return word_freq_cleaned
@@ -64,13 +64,19 @@ def add_rank(tuple_list):
 
 
 def words_tuple_list_from_titles(raw_title_list, word_count):
+
     exclude_words_file, min_word_length = load_config()
-    title_list = clean_list(raw_title_list)
     exclude_words = read_excluded_words(exclude_words_file)
+
+    title_list = clean_list(raw_title_list)
+
     word_freq_abs = word_freq_from_list(title_list)
-    word_freq_abs_clean = word_freq_cleaner(word_freq_abs,
-                                            exclude_words,
-                                            min_word_length)
-    word_freq_pctg = calculate_freq_percentage(word_freq_abs_clean)
+    word_freq_abs_filtered = word_freq_filter(word_freq_abs,
+                                              exclude_words,
+                                              min_word_length)
+
+    word_freq_pctg = calculate_freq_percentage(word_freq_abs_filtered)
     word_freq_pctg_top = get_top_words(word_freq_pctg, word_count)
-    return add_rank(word_freq_pctg_top)
+    word_freq_pctg_top_ranked = add_rank(word_freq_pctg_top)
+
+    return word_freq_pctg_top_ranked

@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
 import scraper_tools.title_list_scraper as title_list_scraper
-import scraper_tools.word_frequencies as word_frequencies
+import scraper_tools.data_processor as data_processor
 import db_tools.db_reader as db_reader
 import db_tools.db_writer as db_writer
 
@@ -40,7 +40,7 @@ def process_scraped_data(scrape_keys, words_stored):
 
         raw_title_list, scrape = db_reader.read_site_titles(scrape_key)
         site, day, hour = scrape[1], scrape[2], scrape[3]
-        words_tuple_list = word_frequencies\
+        words_tuple_list = data_processor\
             .words_tuple_list_from_titles(raw_title_list,
                                           words_stored)
 

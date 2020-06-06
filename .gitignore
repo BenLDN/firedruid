@@ -2,7 +2,7 @@ old
 venv
 *.db
 *.csv
-*.ods
+*.ods*
 *ipynb*
 *tester*
 **/__pycache__
