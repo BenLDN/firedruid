@@ -78,3 +78,21 @@ def top_words_daily(how_many):
         value_list.append(df.iloc[i, :].tolist())
 
     return dates, words, value_list
+
+
+def read_site_titles(scrape_key):
+    conn = db_operations.db_connect('raw')
+
+    sql_titles = 'SELECT * FROM titles WHERE fk_scrapes = ' + str(scrape_key)
+    sql_scrape = 'SELECT * FROM scrapes WHERE pk_scrapes = ' + str(scrape_key)
+
+    raw_titles = db_operations.execute_sql(conn, sql_titles)
+    scrape = db_operations.execute_sql(conn, sql_scrape)
+
+    site_titles = [title_item[2]
+                   for title_item in raw_titles
+                   if title_item[1] == scrape_key]
+
+    db_operations.db_close(conn)
+
+    return site_titles, scrape[0]

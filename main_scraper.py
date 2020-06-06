@@ -2,7 +2,8 @@ import json
 from datetime import datetime
 import scraper_tools.title_list_scraper as title_list_scraper
 import scraper_tools.word_frequencies as word_frequencies
-import db_tools.db_operations as db_operations
+import db_tools.db_reader as db_reader
+import db_tools.db_writer as db_writer
 
 
 def read_news_site_list():
@@ -15,41 +16,41 @@ def read_news_site_list():
 
 def scrape_all_sites():
 
-    news_sites = read_news_site_list()
-    conn = db_operations.db_connect()
     scrape_keys = []
-    sites = []
-    days = []
-    hours = []
-
     day = datetime.now().strftime("%Y-%m-%d")
     hour = datetime.now().strftime("%H:%M")
 
-    for site in news_sites:
-        site_name = site['name']
+    news_sites = read_news_site_list()
 
-        scrape_key = db_operations.insert_scrape(conn, [site_name, day, hour])
-        scrape_keys.append(scrape_key)
-        sites.append(site_name)
-        days.append(day)
-        hours.append(hour)
+    for site in news_sites:
 
         title_list = title_list_scraper.get_title_list_from_site(site)
+        scrape_key = db_writer.store_scraped_titles(site['name'],
+                                                    day,
+                                                    hour,
+                                                    title_list)
+        scrape_keys.append(scrape_key)
 
-        db_operations.insert_titles(conn, title_list, scrape_key)
+    return scrape_keys
 
-    db_operations.db_close(conn)
 
-    return scrape_keys, sites, days, hours
+def process_scraped_data(scrape_keys, words_stored):
+
+    for scrape_key in scrape_keys:
+
+        raw_title_list, scrape = db_reader.read_site_titles(scrape_key)
+        site, day, hour = scrape[1], scrape[2], scrape[3]
+        words_tuple_list = word_frequencies\
+            .words_tuple_list_from_titles(raw_title_list,
+                                          words_stored)
+
+        db_writer.store_words(words_tuple_list, scrape_key, site, day, hour)
 
 
 if __name__ == '__main__':
 
-    scrape_keys, sites, days, hours = scrape_all_sites()
+    words_stored = 20
 
-    for (scrape_key, site, day, hour) in zip(scrape_keys, sites, days, hours):
-        word_frequencies.db_titles_to_top_words(scrape_key,
-                                                site,
-                                                day,
-                                                hour,
-                                                20)
+    scrape_keys = scrape_all_sites()
+
+    process_scraped_data(scrape_keys, words_stored)

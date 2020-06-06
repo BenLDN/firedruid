@@ -4,4 +4,5 @@ venv
 *.csv
 *.ods
 *ipynb*
+*tester*
 **/__pycache__

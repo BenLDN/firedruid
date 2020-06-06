@@ -1,111 +1,124 @@
 import sys
 import pandas as pd
+import main_scraper
 import db_tools.db_operations as db_operations
-import scraper_tools.word_frequencies as word_frequencies
-
-
-def screen_dump():
-
-    conn = db_operations.db_connect('raw')
-
-    scrapes = db_operations.execute_sql(conn, 'SELECT * FROM scrapes')
-    titles = db_operations.execute_sql(conn, 'SELECT * FROM titles')
-
-    print('number of scrapes: ' + str(len(scrapes)))
-    print('number of titles: ' + str(len(titles)))
-
-    print('scrapes: ')
-    for scrape in scrapes:
-        print(scrape)
-
-    print('titles: ')
-    for title in titles:
-        print(title)
-
-
-def csv_word_dump():
-
-    conn = db_operations.db_connect('processed')
-    sql = '''SELECT * FROM words'''
-    top_words = db_operations.execute_sql(conn, sql)
-    db_operations.db_close(conn)
-
-    if __name__ == '__main__':
-        df = pd.DataFrame(top_words)
-        df.to_csv('db.csv')
-
-    print('Done')
 
 
 def recreate_db():
 
-    conn = db_operations.db_connect('raw')
-    db_operations.create_scrapers_table(conn)
-    db_operations.create_titles_table(conn)
+    confirm = input('''This will erase both databases.
+                       Enter "Y" to continue: ''')
+
+    if confirm == 'Y':
+
+        conn = db_operations.db_connect('raw')
+        db_operations.create_scrapers_table(conn)
+        db_operations.create_titles_table(conn)
+        db_operations.db_close(conn)
+
+        conn = db_operations.db_connect('processed')
+        db_operations.create_words_table(conn)
+        db_operations.db_close(conn)
+
+        print('Done')
+
+    else:
+        print('Cancelled')
+
+
+def db_to_csv(db_name):
+
+    conn = db_operations.db_connect(db_name)
+
+    if db_name == 'processed':
+        sql = '''SELECT *
+                 FROM words'''
+        file_name = 'db_processed.csv'
+    elif db_name == 'raw':
+        sql = '''SELECT *
+                 FROM scrapes s
+                 LEFT JOIN titles t
+                 ON s.pk_scrapes = t.fk_scrapes'''
+        file_name = 'db_raw.csv'
+
+    data_dump = db_operations.execute_sql(conn, sql)
     db_operations.db_close(conn)
 
-    conn = db_operations.db_connect('processed')
-    db_operations.create_words_table(conn)
-    db_operations.db_close(conn)
+    pd.DataFrame(data_dump).to_csv(file_name)
 
     print('Done')
 
 
-def rerun_word_freq():
+def rerun_processing():
+
+    words_stored = int(input('''The most common X words
+                                from each scrape are stored.
+                                What should X be? '''))
 
     conn = db_operations.db_connect('raw')
 
     db_operations.create_words_table(conn)
-    sql = '''SELECT * from scrapes'''
-    scrape_rows = db_operations.execute_sql(conn, sql)
+    sql = '''SELECT pk_scrapes from scrapes'''
+    scrape_keys_raw = db_operations.execute_sql(conn, sql)
+    scrape_keys = [key[0] for key in scrape_keys_raw]
 
     db_operations.db_close(conn)
 
-    for scrape_row in scrape_rows:
-        word_frequencies.db_titles_to_top_words(scrape_row[0],
-                                                scrape_row[1],
-                                                scrape_row[2],
-                                                scrape_row[3],
-                                                20)
+    main_scraper.process_scraped_data(scrape_keys, words_stored)
 
     print('Done')
 
 
 def run_sql():
 
+    db_name = input('''Which database do you want to use:
+                       "raw" (default) or "processed"? ''')
+
+    if db_name != 'processed':
+        db_name = 'raw'
+
+    out_method = input('''Output should be sent to
+                          "screen" (default) or "csv" ''')
+
+    if out_method != 'csv':
+        out_method = 'screen'
+
     sql = input('SQL: ')
 
-    conn = db_operations.db_connect()
+    conn = db_operations.db_connect(db_name)
     data = db_operations.execute_sql(conn, sql)
     db_operations.db_close(conn)
 
-    print(data)
+    if out_method == 'screen':
+        print(data)
+    else:
+        pd.DataFrame(data).to_csv('sql_output.csv')
 
 
 if __name__ == '__main__':
 
     helptxt = '''Options:
 
-                 screen-dump,
-                 csv-words-dump,
+                 raw-to-csv,
+                 processed-to-csv,
                  recreate-db,
-                 rerun-word-freq,
+                 rerun-processing,
                  run-sql'''
 
     if len(sys.argv) != 2:
         print(helptxt)
 
-    elif sys.argv[1] == 'screen-dump':
-        screen_dump()
+    elif sys.argv[1] == 'raw-to-csv':
+        db_to_csv('raw')
 
-    elif sys.argv[1] == 'csv-words-dump':
-        csv_word_dump()
+    elif sys.argv[1] == 'processed-to-csv':
+        db_to_csv('processed')
 
     elif sys.argv[1] == 'recreate-db':
         recreate_db()
 
-    elif sys.argv[1] == 'rerun-word-freq':
-        rerun_word_freq()
+    elif sys.argv[1] == 'rerun-processing':
+        rerun_processing()
 
     elif sys.argv[1] == 'run-sql':
         run_sql()

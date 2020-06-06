@@ -2,7 +2,6 @@ import re
 import json
 from collections import Counter
 from textblob import Word
-import db_tools.db_operations as db_operations
 
 
 def read_excluded_words():
@@ -11,19 +10,6 @@ def read_excluded_words():
         exclude_words = json.load(exc_file)
 
     return exclude_words
-
-
-def db_read_site_titles(scrape_key):
-    conn = db_operations.db_connect('raw')
-
-    raw_titles = db_operations.execute_sql(conn, 'SELECT * FROM titles')
-    site_titles = [title_item[2]
-                   for title_item in raw_titles
-                   if title_item[1] == scrape_key]
-
-    db_operations.db_close(conn)
-
-    return site_titles
 
 
 def clean_list(raw_list):
@@ -57,7 +43,7 @@ def calculate_freq_percentage(freq_abs):
 
 
 def get_top_words(freq_pctg, word_count):
-    return Counter(freq_pctg).most_common()[: word_count + 1]
+    return Counter(freq_pctg).most_common()[: word_count]
 
 
 def add_rank(tuple_list):
@@ -69,8 +55,7 @@ def add_rank(tuple_list):
     return list_with_rank
 
 
-def words_tuple_list_from_scrape(scrape_key, word_count):
-    raw_title_list = db_read_site_titles(scrape_key)
+def words_tuple_list_from_titles(raw_title_list, word_count):
     title_list = clean_list(raw_title_list)
     exclude_words = read_excluded_words()
     word_freq_abs = word_freq_from_list(title_list)
@@ -78,15 +63,3 @@ def words_tuple_list_from_scrape(scrape_key, word_count):
     word_freq_pctg = calculate_freq_percentage(word_freq_abs_clean)
     word_freq_pctg_top = get_top_words(word_freq_pctg, word_count)
     return add_rank(word_freq_pctg_top)
-
-
-def db_titles_to_top_words(scrape_key, site, day, hour, word_count):
-    words_tuple_list = words_tuple_list_from_scrape(scrape_key, word_count)
-    conn = db_operations.db_connect('processed')
-    db_operations.insert_words(conn,
-                               words_tuple_list,
-                               scrape_key,
-                               site,
-                               day,
-                               hour)
-    db_operations.db_close(conn)
