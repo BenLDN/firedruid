@@ -51,9 +51,8 @@ def db_to_csv(db_name):
 
 def rerun_processing():
 
-    words_stored = int(input('''The most common X words
-                                from each scrape are stored.
-                                What should X be? '''))
+    text = '''Top X words from each scrape are stored. What should X be? '''
+    words_stored = int(input(text))
 
     conn = db_operations.db_connect('raw')
 
@@ -71,14 +70,14 @@ def rerun_processing():
 
 def run_sql():
 
-    db_name = input('''Which database do you want to use:
-                       "raw" (default) or "processed"? ''')
+    text = '''Database to use: "raw" (default) or "processed"? '''
+    db_name = input(text)
 
     if db_name != 'processed':
         db_name = 'raw'
 
-    out_method = input('''Output should be sent to
-                          "screen" (default) or "csv" ''')
+    text = '''Output should be sent to "screen" (default) or "csv" '''
+    out_method = input(text)
 
     if out_method != 'csv':
         out_method = 'screen'

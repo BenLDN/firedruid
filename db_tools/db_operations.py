@@ -1,11 +1,16 @@
+import json
 import sqlite3
 
 
 def db_connect(db='raw'):
+
+    with open('config.json', 'r') as file:
+        config = json.load(file)
+
     if db == 'raw':
-        return sqlite3.connect('raw_data.db')
+        return sqlite3.connect(config['raw_db_path'])
     elif db == 'processed':
-        return sqlite3.connect('processed_data.db')
+        return sqlite3.connect(config['processed_db_path'])
     else:
         pass
 

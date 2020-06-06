@@ -116,9 +116,9 @@ exclude_words = ['the', 'be', 'is', 'am', 'are', 'was',
                  'taking', 'got', 'everything', 'every']
 
 
-with open('news_sites.txt', 'w') as news_file:
-    json.dump(news_sites, news_file)
+with open('news_sites.json', 'w') as news_file:
+    json.dump(news_sites, news_file, indent=2)
 
 
-with open('exclude_words.txt', 'w') as exclude_file:
-    json.dump(exclude_words, exclude_file)
+with open('exclude_words.json', 'w') as exclude_file:
+    json.dump(exclude_words, exclude_file, indent=2)

@@ -4,9 +4,17 @@ from collections import Counter
 from textblob import Word
 
 
-def read_excluded_words():
+def load_config():
 
-    with open('exclude_words.txt', 'r') as exc_file:
+    with open('config.json', 'r') as file:
+        config = json.load(file)
+
+    return config['exclude_words_file'], config['min_word_length']
+
+
+def read_excluded_words(exclude_words_file):
+
+    with open('exclude_words.json', 'r') as exc_file:
         exclude_words = json.load(exc_file)
 
     return exclude_words
@@ -29,7 +37,7 @@ def word_freq_from_list(title_list):
     return Counter(title_words_lemmatised)
 
 
-def word_freq_cleaner(raw_freq, exclude_words):
+def word_freq_cleaner(raw_freq, exclude_words, min_word_length):
     word_freq_cleaned = {word: freq for word, freq in raw_freq.items()
                          if len(word) >= 3 and
                          word not in exclude_words}
@@ -56,10 +64,13 @@ def add_rank(tuple_list):
 
 
 def words_tuple_list_from_titles(raw_title_list, word_count):
+    exclude_words_file, min_word_length = load_config()
     title_list = clean_list(raw_title_list)
-    exclude_words = read_excluded_words()
+    exclude_words = read_excluded_words(exclude_words_file)
     word_freq_abs = word_freq_from_list(title_list)
-    word_freq_abs_clean = word_freq_cleaner(word_freq_abs, exclude_words)
+    word_freq_abs_clean = word_freq_cleaner(word_freq_abs,
+                                            exclude_words,
+                                            min_word_length)
     word_freq_pctg = calculate_freq_percentage(word_freq_abs_clean)
     word_freq_pctg_top = get_top_words(word_freq_pctg, word_count)
     return add_rank(word_freq_pctg_top)

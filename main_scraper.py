@@ -6,21 +6,21 @@ import db_tools.db_reader as db_reader
 import db_tools.db_writer as db_writer
 
 
-def read_news_site_list():
+def read_news_site_list(news_sites_file):
 
-    with open('news_sites.txt', 'r') as infile:
-        news_sites = json.load(infile)
+    with open(news_sites_file, 'r') as file:
+        news_sites = json.load(file)
 
     return news_sites
 
 
-def scrape_all_sites():
+def scrape_all_sites(news_sites_file):
 
     scrape_keys = []
     day = datetime.now().strftime("%Y-%m-%d")
     hour = datetime.now().strftime("%H:%M")
 
-    news_sites = read_news_site_list()
+    news_sites = read_news_site_list(news_sites_file)
 
     for site in news_sites:
 
@@ -49,8 +49,8 @@ def process_scraped_data(scrape_keys, words_stored):
 
 if __name__ == '__main__':
 
-    words_stored = 20
+    with open('config.json', 'r') as file:
+        config = json.load(file)
 
-    scrape_keys = scrape_all_sites()
-
-    process_scraped_data(scrape_keys, words_stored)
+    scrape_keys = scrape_all_sites(config['news_sites_file'])
+    process_scraped_data(scrape_keys, config['words_stored'])
