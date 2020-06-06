@@ -9,7 +9,6 @@ def read_all():
     conn = db_operations.db_connect('processed')
 
     sql = '''SELECT * FROM words'''
-
     top_words = db_operations.execute_sql(conn, sql)
 
     df = pd.DataFrame(top_words,
@@ -17,9 +16,7 @@ def read_all():
                                'tm', 'word', 'freq', 'rank'])
 
     df['dt'] = pd.to_datetime(df['dt'])
-
     df = df[df.groupby(['dt'])['tm'].transform(max) == df['tm']]
-
     db_operations.db_close(conn)
 
     return df
@@ -28,9 +25,7 @@ def read_all():
 def top_words_7d():
 
     df = read_all()
-
     df = df[df.dt >= datetime.datetime.now() - pd.to_timedelta("7day")]
-
     scrape_num = len(df.groupby(['dt', 'site']))
 
     df = df.groupby(['word']) \
@@ -47,7 +42,6 @@ def top_words_7d():
 def top_words_daily(how_many):
 
     df = read_all()
-
     site_num = len(df.groupby(['site']))
 
     df = pd.pivot_table(df,
@@ -57,19 +51,13 @@ def top_words_daily(how_many):
                         aggfunc=np.sum)
 
     df = df / site_num
-
     df = df.fillna(0)
-
     df['total'] = df.sum(axis=1)
-
     df = df.sort_values(by='total', ascending=False)
-
     df = df.iloc[:how_many, :-1]
 
     datetimes = list(df.columns)
-
     dates = [str(datetime)[:10] for datetime in datetimes]
-
     words = list(df.index)
 
     value_list = []
