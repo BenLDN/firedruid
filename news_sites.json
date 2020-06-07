@@ -8,8 +8,8 @@
         }
       ]
     ],
-    "name": "bbc",
-    "link": "https://www.bbc.co.uk"
+    "link": "https://www.bbc.co.uk",
+    "name": "bbc"
   },
   {
     "rules": [
@@ -20,8 +20,8 @@
         }
       ]
     ],
-    "name": "guardian",
-    "link": "https://www.theguardian.com/uk"
+    "link": "https://www.theguardian.com/uk",
+    "name": "guardian"
   },
   {
     "rules": [
@@ -36,8 +36,8 @@
         0
       ]
     ],
-    "name": "independent",
-    "link": "https://www.independent.co.uk"
+    "link": "https://www.independent.co.uk",
+    "name": "independent"
   },
   {
     "rules": [
@@ -48,8 +48,8 @@
         }
       ]
     ],
-    "name": "telegraph",
-    "link": "https://www.telegraph.co.uk"
+    "link": "https://www.telegraph.co.uk",
+    "name": "telegraph"
   },
   {
     "rules": [
@@ -60,8 +60,8 @@
         }
       ]
     ],
-    "name": "dailymail",
-    "link": "https://www.dailymail.co.uk"
+    "link": "https://www.dailymail.co.uk",
+    "name": "dailymail"
   },
   {
     "rules": [
@@ -72,8 +72,8 @@
         }
       ]
     ],
-    "name": "sun",
-    "link": "https://www.thesun.co.uk"
+    "link": "https://www.thesun.co.uk",
+    "name": "sun"
   },
   {
     "rules": [
@@ -84,8 +84,8 @@
         }
       ]
     ],
-    "name": "mirror",
-    "link": "https://www.mirror.co.uk"
+    "link": "https://www.mirror.co.uk",
+    "name": "mirror"
   },
   {
     "rules": [
@@ -98,8 +98,8 @@
         0
       ]
     ],
-    "name": "express",
-    "link": "https://www.express.co.uk"
+    "link": "https://www.express.co.uk",
+    "name": "express"
   },
   {
     "rules": [
@@ -114,8 +114,8 @@
         0
       ]
     ],
-    "name": "standard",
-    "link": "https://www.standard.co.uk/"
+    "link": "https://www.standard.co.uk/",
+    "name": "standard"
   },
   {
     "rules": [
@@ -126,8 +126,8 @@
         }
       ]
     ],
-    "name": "star",
-    "link": "https://www.dailystar.co.uk/"
+    "link": "https://www.dailystar.co.uk/",
+    "name": "star"
   },
   {
     "rules": [
@@ -136,8 +136,8 @@
         0
       ]
     ],
-    "name": "metro",
-    "link": "https://metro.co.uk/"
+    "link": "https://metro.co.uk/",
+    "name": "metro"
   },
   {
     "rules": [
@@ -146,8 +146,8 @@
         0
       ]
     ],
-    "name": "times",
-    "link": "https://www.thetimes.co.uk/"
+    "link": "https://www.thetimes.co.uk/",
+    "name": "times"
   },
   {
     "rules": [
@@ -156,8 +156,8 @@
         0
       ]
     ],
-    "name": "week",
-    "link": "https://www.theweek.co.uk/"
+    "link": "https://www.theweek.co.uk/",
+    "name": "week"
   },
   {
     "rules": [
@@ -168,8 +168,8 @@
         }
       ]
     ],
-    "name": "ft",
-    "link": "https://www.ft.com/"
+    "link": "https://www.ft.com/",
+    "name": "ft"
   },
   {
     "rules": [
@@ -178,7 +178,7 @@
         0
       ]
     ],
-    "name": "inews",
-    "link": "https://inews.co.uk/"
+    "link": "https://inews.co.uk/",
+    "name": "inews"
   }
 ]

@@ -94,32 +94,32 @@ news_sites = [
     }
     ]
 
-exclude_words = ['the', 'be', 'is', 'am', 'are', 'was',
-                 'were', 'been', 'to', 'of', 'and', 'a', 'in',
-                 'that', 'have', 'has', 'had', 'i', 'it', 'for',
-                 'not', 'on', 'with', 'he', 'as', 'you',
-                 'do', 'does', 'did', 'done', 'at', 'this',
-                 'but', 'his', 'by', 'from', 'they', 'we',
-                 'say', 'her', 'she', 'or', 'an', 'will',
-                 'my', 'one', 'all', 'would', 'there', 'their',
-                 'what', 'so', 'up', 'out', 'if', 'about', 'who',
-                 'get', 'which', 'go', 'me', 'when', 'make', 'can',
-                 'like', 'time', 'no', 'just', 'him', 'know',
-                 'take', 'people', 'into', 'year', 'your', 'good',
-                 'some', 'could', 'them', 'see', 'other', 'than',
-                 'then', 'now', 'look', 'only', 'come', 'its', 'over',
-                 'think', 'also', 'back', 'after', 'use', 'two',
-                 'how', 'our', 'work', 'first', 'well', 'way', 'even',
-                 'new', 'want', 'because', 'any', 'these', 'give',
-                 'gives', 'gave', 'given' 'day', 'most', 'us', 'says',
-                 'why', 'off', 'more', 'show', 'ever', 'need', 'should',
-                 'taking', 'got', 'everything', 'every', 'best', 'news',
-                 '2020', '2021', 'week', 'star', 'day', 'life']
+excluded_words = ['the', 'be', 'is', 'am', 'are', 'was',
+                  'were', 'been', 'to', 'of', 'and', 'a', 'in',
+                  'that', 'have', 'has', 'had', 'i', 'it', 'for',
+                  'not', 'on', 'with', 'he', 'as', 'you',
+                  'do', 'does', 'did', 'done', 'at', 'this',
+                  'but', 'his', 'by', 'from', 'they', 'we',
+                  'say', 'her', 'she', 'or', 'an', 'will',
+                  'my', 'one', 'all', 'would', 'there', 'their',
+                  'what', 'so', 'up', 'out', 'if', 'about', 'who',
+                  'get', 'which', 'go', 'me', 'when', 'make', 'can',
+                  'like', 'time', 'no', 'just', 'him', 'know',
+                  'take', 'people', 'into', 'year', 'your', 'good',
+                  'some', 'could', 'them', 'see', 'other', 'than',
+                  'then', 'now', 'look', 'only', 'come', 'its', 'over',
+                  'think', 'also', 'back', 'after', 'use', 'two',
+                  'how', 'our', 'work', 'first', 'well', 'way', 'even',
+                  'new', 'want', 'because', 'any', 'these', 'give',
+                  'gives', 'gave', 'given' 'day', 'most', 'us', 'says',
+                  'why', 'off', 'more', 'show', 'ever', 'need', 'should',
+                  'taking', 'got', 'everything', 'every', 'best', 'news',
+                  '2020', '2021', 'week', 'star', 'day', 'life']
 
 
 with open('news_sites.json', 'w') as news_file:
     json.dump(news_sites, news_file, indent=2)
 
 
-with open('exclude_words.json', 'w') as exclude_file:
-    json.dump(exclude_words, exclude_file, indent=2)
+with open('excluded_words.json', 'w') as exclude_file:
+    json.dump(excluded_words, exclude_file, indent=2)

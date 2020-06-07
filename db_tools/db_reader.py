@@ -51,6 +51,7 @@ def top_words_daily(how_many):
                         aggfunc=np.sum)
 
     df = df / site_num
+
     df = df.fillna(0)
     df['total'] = df.sum(axis=1)
     df = df.sort_values(by='total', ascending=False)

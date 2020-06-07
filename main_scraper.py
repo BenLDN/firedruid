@@ -40,9 +40,11 @@ def process_scraped_data(scrape_keys, words_stored):
 
         raw_title_list, scrape = db_reader.read_site_titles(scrape_key)
         site, day, hour = scrape[1], scrape[2], scrape[3]
+
         words_tuple_list = data_processor\
             .words_tuple_list_from_titles(raw_title_list,
                                           words_stored)
+
 
         db_writer.store_words(words_tuple_list, scrape_key, site, day, hour)
 

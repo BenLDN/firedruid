@@ -6,8 +6,8 @@ import db_tools.db_operations as db_operations
 
 def recreate_db():
 
-    confirm = input('''This will erase both databases.
-                       Enter "Y" to continue: ''')
+    text = '''This might erase both databases. Enter "Y" to continue: '''
+    confirm = input(text)
 
     if confirm == 'Y':
 
@@ -64,8 +64,6 @@ def rerun_processing():
     db_operations.db_close(conn)
 
     main_scraper.process_scraped_data(scrape_keys, words_stored)
-
-    print('Done')
 
 
 def run_sql():

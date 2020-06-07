@@ -3,21 +3,25 @@ import json
 from collections import Counter
 from textblob import Word
 
+####
+from datetime import datetime
+####
+
 
 def load_config():
 
     with open('config.json', 'r') as file:
         config = json.load(file)
 
-    return config['exclude_words_file'], config['min_word_length']
+    return config['excluded_words_file'], config['min_word_length']
 
 
-def read_excluded_words(exclude_words_file):
+def read_excluded_words(excluded_words_file):
 
-    with open('exclude_words.json', 'r') as exc_file:
-        exclude_words = json.load(exc_file)
+    with open('excluded_words.json', 'r') as exc_file:
+        excluded_words = json.load(exc_file)
 
-    return exclude_words
+    return set(excluded_words)
 
 
 def clean_list(raw_list):
@@ -37,10 +41,10 @@ def word_freq_from_list(title_list):
     return Counter(title_words_lemmatised)
 
 
-def word_freq_filter(raw_freq, exclude_words, min_word_length):
+def word_freq_filter(raw_freq, excluded_words, min_word_length):
     word_freq_cleaned = {word: freq for word, freq in raw_freq.items()
                          if len(word) >= min_word_length and
-                         word not in exclude_words}
+                         word not in excluded_words}
 
     return word_freq_cleaned
 
@@ -65,18 +69,19 @@ def add_rank(tuple_list):
 
 def words_tuple_list_from_titles(raw_title_list, word_count):
 
-    exclude_words_file, min_word_length = load_config()
-    exclude_words = read_excluded_words(exclude_words_file)
+    excluded_words_file, min_word_length = load_config()
+    excluded_words = read_excluded_words(excluded_words_file)
 
     title_list = clean_list(raw_title_list)
 
-    word_freq_abs = word_freq_from_list(title_list)
+    word_freq_abs = word_freq_from_list(title_list) # This step takes the most time by far
     word_freq_abs_filtered = word_freq_filter(word_freq_abs,
-                                              exclude_words,
+                                              excluded_words,
                                               min_word_length)
 
     word_freq_pctg = calculate_freq_percentage(word_freq_abs_filtered)
     word_freq_pctg_top = get_top_words(word_freq_pctg, word_count)
+
     word_freq_pctg_top_ranked = add_rank(word_freq_pctg_top)
 
     return word_freq_pctg_top_ranked
