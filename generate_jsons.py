@@ -113,7 +113,8 @@ exclude_words = ['the', 'be', 'is', 'am', 'are', 'was',
                  'new', 'want', 'because', 'any', 'these', 'give',
                  'gives', 'gave', 'given' 'day', 'most', 'us', 'says',
                  'why', 'off', 'more', 'show', 'ever', 'need', 'should',
-                 'taking', 'got', 'everything', 'every']
+                 'taking', 'got', 'everything', 'every', 'best', 'news',
+                 '2020', '2021', 'week', 'star', 'day', 'life']
 
 
 with open('news_sites.json', 'w') as news_file:
