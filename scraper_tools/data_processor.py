@@ -3,10 +3,6 @@ import json
 from collections import Counter
 from textblob import Word
 
-####
-from datetime import datetime
-####
-
 
 def load_config():
 
@@ -74,7 +70,8 @@ def words_tuple_list_from_titles(raw_title_list, word_count):
 
     title_list = clean_list(raw_title_list)
 
-    word_freq_abs = word_freq_from_list(title_list) # This step takes the most time by far
+    #  This step takes the most time by far
+    word_freq_abs = word_freq_from_list(title_list)
     word_freq_abs_filtered = word_freq_filter(word_freq_abs,
                                               excluded_words,
                                               min_word_length)
