@@ -21,7 +21,7 @@
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
             <a class="navbar-brand js-scroll-trigger" href="#page-top">
-                <span class="d-block d-lg-none">FireDruid</span><span class="d-none d-lg-block"><img class="img-fluid" src="{{ url_for('static', filename='img/fire.png') }}" alt="" /></span>
+                <span class="d-block d-lg-none">FireDruid</span><span class="d-none d-lg-block"><img style="max-width: 50%; height: auto"; src="{{ url_for('static', filename='img/fire.png') }}" alt="" /></span>
             </a>
              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -39,18 +39,17 @@
             <!-- Trends-->
             <section class="resume-section" id="trends">
                 <div class="resume-section-content">
-                    <h2 class="mb-0">Word Frequency Trends in British News Websites</h2>
-                    <p class="lead mb-5">Chart description, chart dedscription, chart dedscription, chart dedscription, chart dedscription, chart dedscription</p>
-                    <div class="news-logos">
-                        (news logos come here)
-                    </div>
+                    <h2 class="fire-title">Word Frequency Trends</h2>
+                    <p class="fire-text">The frequency of the most common word in front page titles of the 15 most popular British news sites.</p>
                     <!-- CHART TEST-->
                         <!-- line chart canvas element -->
-                        <canvas id="trendsChart" width="800" height="400"></canvas>
+                        <div class="chart-container" style="position: relative;">
+                            <canvas id="trendsChart"></canvas>
+                        </div>
                         <script>
                               // Global parameters:
                               // do not resize the chart canvas when its container does (keep at 600x400px)
-                              Chart.defaults.global.responsive = false;
+                              Chart.defaults.global.responsive = true;
 
                               // define the chart data
                               var chartData = {
@@ -62,24 +61,15 @@
                                     {
                                     label: '{{ word }}',
                                     fill: false,
-                                    lineTension: 0.1,
-                                    backgroundColor: "{{colour}}",
+                                    lineTension: 0.3,
                                     borderColor: "{{colour}}",
-                                    borderCapStyle: 'butt',
-                                    borderDash: [],
-                                    borderDashOffset: 0.0,
-                                    borderJoinStyle: 'miter',
-                                    pointBorderColor: "{{colour}}",
-                                    pointBackgroundColor: "#fff",
-                                    pointBorderWidth: 1,
                                     pointHoverRadius: 5,
                                     pointHoverBackgroundColor: "{{colour}}",
                                     pointHoverBorderColor: "{{colour}}",
-                                    pointHoverBorderWidth: 2,
                                     pointRadius: 1,
-                                    pointHitRadius: 10,
+                                    pointHitRadius: 15,
                                     data : {{values}},
-                                    spanGaps: false
+
                                     },
                                     {% endfor %}
 
@@ -120,81 +110,59 @@
             <!-- Words-->
             <section class="resume-section" id="words">
                 <div class="resume-section-content">
-                    <h2 class="mb-0">Most Common Words in the Last Seven Days</h2>
-                    <p class="lead mb-5">Chart description, chart dedscription, chart dedscription, chart dedscription, chart dedscription, chart dedscription</p>
-                    <div class="news-logos">
-                        (news logos come here)
-                    </div>
+                    <h2 class="fire-title">Most Common Words</h2>
+                    <p class="fire-text">Top 10 most common words in front page titles of the 15 most popular British news sites in the last 7 days./p>
                     <!-- CHART TEST-->
-				        <!-- line chart canvas element -->
-				        <canvas id="myChart" width="800" height="400"></canvas>
-						<script>
-						      // Global parameters:
-						      // do not resize the chart canvas when its container does (keep at 600x400px)
-						      Chart.defaults.global.responsive = false;
-						      Chart.defaults.global.legend.display = false;
+                        <!-- line chart canvas element -->
+                        <div class="chart-container" style="position: relative;">
+                            <canvas id="wordChart"></canvas>
+                        </div>
+                        <script>
+                            Chart.defaults.global.responsive = true;
+                            Chart.defaults.global.legend.display = false;
 
-						      // define the chart data
-						      var chartData = {
+                            var wordData = 
+                                {
 
-						        labels : [{% for label in words_labels %}
+                                labels : [{% for label in words_labels %}
                                            "{{label}}",
                                           {% endfor %}],
-						        datasets : [{
-
-						            fill: true,
-						            lineTension: 0.1,
-						            backgroundColor: "#bd5d38",
-						            borderColor: "#bd5d38",
-						            borderCapStyle: 'butt',
-						            borderDash: [],
-						            borderDashOffset: 0.0,
-						            borderJoinStyle: 'miter',
-						            pointBorderColor: "#bd5d38",
-						            pointBackgroundColor: "#fff",
-						            pointBorderWidth: 1,
-						            pointHoverRadius: 5,
-						            pointHoverBackgroundColor: "#bd5d38",
-						            pointHoverBorderColor: "#bd5d38",
-						            pointHoverBorderWidth: 2,
-						            pointRadius: 1,
-						            pointHitRadius: 10,
-						            data : [{% for item in words_values %}
+                                datasets : [{
+                                    backgroundColor: "#dc3545",
+                                    data : [{% for item in words_values %}
                                               {{item}},
-                                            {% endfor %}],
-						            spanGaps: false
-						        }
+                                            {% endfor %}]
 
-						        ]
-						      }
+                                           }]
+                                }
 
-						      // get chart canvas
-						      var ctx = document.getElementById("myChart").getContext("2d");
+                              // get chart canvas
+                              var ctx = document.getElementById("wordChart").getContext("2d");
 
-						      // create the chart using the chart canvas
-						      var myChart = new Chart(ctx, {
-						        type: 'bar',
-						        data: chartData,
+                              // create the chart using the chart canvas
+                              var wordChart = new Chart(ctx, {
+                                type: 'horizontalBar',
+                                data: wordData,
 
-						        options: {
-						        scales: {
-						            
-						            yAxes: [{
-						            ticks: {
-						            
-						                   min: 0,
-						                   callback: function(value){return value.toFixed(2)+ "%"}
-						                },  
-						                scaleLabel: {
-						                   display: true,
-						                   labelString: "Word Frequency"
-						                }
-						            }]
-						        }
-						    }
+                                options: {
+                                scales: {
+                                    
+                                    xAxes: [{
+                                    ticks: {
+                                    
+                                           min: 0,
+                                           callback: function(value){return value.toFixed(2)+ "%"}
+                                        },  
+                                        scaleLabel: {
+                                           display: true,
+                                           labelString: "Word Frequency"
+                                        }
+                                    }]
+                                }
+                            }
 
-						      });
-						</script>
+                              });
+                        </script>
 
 
                 </div>
@@ -203,9 +171,9 @@
             <!-- Sites-->
             <section class="resume-section" id="sites">
                 <div class="resume-section-content">
-                    <h2 class="mb-5">Comparison of News Websites</h2>
+                    <h2 class="fire-title">Comparison of News Websites</h2>
                     <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
-                        <p>Placeholder for more charts</p>
+                        <p class="fire-text">Placeholder for more charts</p>
                     </div>
                 </div>
             </section>
@@ -213,20 +181,20 @@
             <!-- About-->
             <section class="resume-section" id="about">
                 <div class="resume-section-content">
-                    <h2 class="mb-5">About FireDruid</h2>
+                    <h2 class="fire-title">About FireDruid</h2>
                     <div class="resume-section-content">
-                    	<p>Placeholder for description</p> <br><br>
-                    	Source code: <a href="https://github.com/BenLDN/firedruid">GitHub</a>
-                    		(<a href="https://github.com/BenLDN/firedruid/blob/master/app_structure.png">app structure</a>, 
-                    		<a href="https://github.com/BenLDN/firedruid/blob/master/db_structure.png">database structure</a>) <br>
-                    	Front-end template: <a href="https://startbootstrap.com/themes/resume/">Start Bootstrap</a> <br>
-                    	Main packages used: 
-                    		<a href="https://palletsprojects.com/p/flask/">Flask</a>, 
-                    		<a href="https://www.sqlite.org/">SQLite</a>, 
-                    		<a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/">BeautifulSoup</a>, 
-                    		<a href="https://pandas.pydata.org/">Pandas</a>, 
-                    		<a href="https://www.chartjs.org/">Chart.js</a> <br>
-                    	Hosted on <a href="https://www.pythonanywhere.com/">PythonAnywhere</a>
+                        <p>Placeholder for description</p> <br><br>
+                        Source code: <a href="https://github.com/BenLDN/firedruid">GitHub</a>
+                            (<a href="https://github.com/BenLDN/firedruid/blob/master/app_structure.png">app structure</a>, 
+                            <a href="https://github.com/BenLDN/firedruid/blob/master/db_structure.png">database structure</a>) <br>
+                        Front-end template: <a href="https://startbootstrap.com/themes/resume/">Start Bootstrap</a> <br>
+                        Main packages used: 
+                            <a href="https://palletsprojects.com/p/flask/">Flask</a>, 
+                            <a href="https://www.sqlite.org/">SQLite</a>, 
+                            <a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/">BeautifulSoup</a>, 
+                            <a href="https://pandas.pydata.org/">Pandas</a>, 
+                            <a href="https://www.chartjs.org/">Chart.js</a> <br>
+                        Hosted on <a href="https://www.pythonanywhere.com/">PythonAnywhere</a>
                     </div>
                 </div>
             </section>

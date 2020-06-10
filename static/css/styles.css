@@ -10133,3 +10133,10 @@ section.resume-section .resume-section-content {
     padding-bottom: 5rem;
   }
 }
+
+/*!
+Added by Ben
+ */
+
+.fire-title {font-size: 4vw;}
+.fire-text {font-size: 2vw;}
