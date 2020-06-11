@@ -39,19 +39,14 @@
             <!-- Trends-->
             <section class="resume-section" id="trends">
                 <div class="resume-section-content">
-                    <h2 class="fire-title">Word Frequency Trends</h2>
-                    <p class="fire-text">The frequency of the most common word in front page titles of the 15 most popular British news sites.</p>
-                    <!-- CHART TEST-->
-                        <!-- line chart canvas element -->
-                        <div class="chart-container" style="position: relative;">
+                    <h2 class="fire-title">Trends</h2>
+                    <p class="fire-text">Change in the frequency of the most common word in front page titles of the 15 most popular British news sites.</p>
+                        <div class="fire-chart-container">
                             <canvas id="trendsChart"></canvas>
                         </div>
                         <script>
-                              // Global parameters:
-                              // do not resize the chart canvas when its container does (keep at 600x400px)
                               Chart.defaults.global.responsive = true;
 
-                              // define the chart data
                               var chartData = {
                                 labels : [{% for label in trends_dates %}
                                            "{{label}}",
@@ -76,14 +71,13 @@
                               ]
                               }
 
-                              // get chart canvas
                               var ctx = document.getElementById("trendsChart").getContext("2d");
 
-                              // create the chart using the chart canvas
                               var trendsChart = new Chart(ctx, {
                                 type: 'line',
                                 data: chartData,
                                 options: {
+
                                 scales: {
                                     
                                     yAxes: [{
@@ -110,11 +104,9 @@
             <!-- Words-->
             <section class="resume-section" id="words">
                 <div class="resume-section-content">
-                    <h2 class="fire-title">Most Common Words</h2>
-                    <p class="fire-text">Top 10 most common words in front page titles of the 15 most popular British news sites in the last 7 days./p>
-                    <!-- CHART TEST-->
-                        <!-- line chart canvas element -->
-                        <div class="chart-container" style="position: relative;">
+                    <h2 class="fire-title">Words</h2>
+                    <p class="fire-text">Top 10 most common words in front page titles of the 15 most popular British news sites in the last 7 days.</p>
+                        <div class="fire-chart-container">
                             <canvas id="wordChart"></canvas>
                         </div>
                         <script>
@@ -136,15 +128,26 @@
                                            }]
                                 }
 
-                              // get chart canvas
                               var ctx = document.getElementById("wordChart").getContext("2d");
 
-                              // create the chart using the chart canvas
                               var wordChart = new Chart(ctx, {
                                 type: 'horizontalBar',
                                 data: wordData,
 
                                 options: {
+                                    tooltips: {
+                                        custom: function(tooltip) {
+                                            if (!tooltip) return;
+                                            // disable displaying the color box;
+                                            tooltip.displayColors = false;
+                                          },
+
+                                      callbacks: {
+                                        label: function(tooltipItem, data) {
+                                          return data['datasets'][0]['data'][tooltipItem['index']] + '%';
+                                                        }
+                                                      }
+                                                    },
                                 scales: {
                                     
                                     xAxes: [{
@@ -154,8 +157,7 @@
                                            callback: function(value){return value.toFixed(2)+ "%"}
                                         },  
                                         scaleLabel: {
-                                           display: true,
-                                           labelString: "Word Frequency"
+                                           display: false,
                                         }
                                     }]
                                 }
@@ -181,7 +183,7 @@
             <!-- About-->
             <section class="resume-section" id="about">
                 <div class="resume-section-content">
-                    <h2 class="fire-title">About FireDruid</h2>
+                    <h2 class="fire-title">About</h2>
                     <div class="resume-section-content">
                         <p>Placeholder for description</p> <br><br>
                         Source code: <a href="https://github.com/BenLDN/firedruid">GitHub</a>
@@ -202,7 +204,7 @@
             <!-- Author-->
             <section class="resume-section" id="author">
                 <div class="resume-section-content">
-                    <h2 class="mb-5">Author</h2>
+                    <h2 class="fire-title">Author</h2>
                         <p>Bio placeholder</p>
                         <a href="https://github.com/BenLDN">GitHub</a> <br>
                         <a href="https://uk.linkedin.com/in/benkulcsar">LinkedIn</a>

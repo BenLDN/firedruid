@@ -10138,5 +10138,6 @@ section.resume-section .resume-section-content {
 Added by Ben
  */
 
-.fire-title {font-size: 4vw;}
-.fire-text {font-size: 2vw;}
+.fire-title {font-size: 3vw;}
+.fire-text {font-size: 1vw;}
+.fire-chart-container {position: relative; height: 75vh}

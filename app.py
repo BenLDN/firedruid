@@ -13,13 +13,13 @@ def root():
 
     top_words = db_reader.top_words_7d()
     words_labels = list(top_words.index)
-    words_values = map(lambda x: x * 100, list(top_words))
+    words_values = map(lambda x: round(x, 6) * 100, list(top_words))
 
     how_many = 5
     trends_dates, trends_wordlist, trends_valuelist = \
         db_reader.top_words_daily(how_many)
 
-    trends_valuelist = [list(map(lambda x: x * 100,
+    trends_valuelist = [list(map(lambda x: round(x, 6) * 100,
                         list(values))) for values in trends_valuelist]
 
     return render_template("index.html",
