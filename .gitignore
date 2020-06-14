@@ -3,6 +3,7 @@ venv
 *.db
 *.csv
 *.ods*
+*.odc*
 *ipynb*
 *tester*
 **/__pycache__
