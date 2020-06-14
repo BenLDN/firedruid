@@ -1,3 +1,4 @@
+import json
 from flask import Flask, render_template
 import db_tools.db_reader as db_reader
 
@@ -11,15 +12,13 @@ app = Flask(__name__)
 @app.route("/")
 def root():
 
-    number_of_words_line = 5
-    number_of_words_bar = 20
-    number_of_days_hourly = 7
-    number_of_days_daily = 30
+    with open('config.json', 'r') as file:
+        config = json.load(file)
 
-    app_load_data = db_reader.get_app_load_data(number_of_words_line,
-                                                number_of_words_bar,
-                                                number_of_days_hourly,
-                                                number_of_days_daily)
+    app_load_data = db_reader.get_app_load_data(config['number_of_words_line'],
+                                                config['number_of_words_bar'],
+                                                config['number_of_days_hourly'],
+                                                config['number_of_days_daily'])
 
     return render_template("index.html",
        top_labels_hourly=list(app_load_data['top_words_hourly']['labels']),
