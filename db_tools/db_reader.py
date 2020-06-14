@@ -9,64 +9,119 @@ def read_all():
     conn = db_operations.db_connect('processed')
 
     sql = '''SELECT * FROM words'''
-    top_words = db_operations.execute_sql(conn, sql)
+    data = db_operations.execute_sql(conn, sql)
 
-    df = pd.DataFrame(top_words,
-                      columns=['key1', 'key2', 'site', 'dt',
+    df = pd.DataFrame(data,
+                      columns=['key1', 'scrape_key', 'site', 'dt',
                                'tm', 'word', 'freq', 'rank'])
 
-    df['dt'] = pd.to_datetime(df['dt'])
-    df = df[df.groupby(['dt'])['tm'].transform(max) == df['tm']]
     db_operations.db_close(conn)
 
-    return df
+    df['dtm'] = df.dt + " " + df.tm
+    df['dtm'] = pd.to_datetime(df['dtm'])
 
-
-def top_words_7d():
-
-    df = read_all()
-    df = df[df.dt >= datetime.datetime.now() - pd.to_timedelta("7day")]
-    scrape_num = len(df.groupby(['dt', 'site']))
-
-    df = df.groupby(['word']) \
-           .sum() \
-           .sort_values(by='freq',
-                        ascending=False) \
-           .iloc[:10]['freq']
-
-    df = df / scrape_num
+    df = df[df.groupby(['dtm'])['tm'].transform(max) == df['tm']]
 
     return df
 
 
-def top_words_daily(how_many):
+def trunc_df_days(df, how_many_days):
+    day_delta = str(how_many_days) + "day"
+    return df[df.dtm >= datetime.datetime.now() - pd.to_timedelta(day_delta)]
 
-    df = read_all()
-    site_num = len(df.groupby(['site']))
+
+def get_trend_data(df, how_many_words, how_many_days, interval):
+
+    trend_data = {}
+
+    df = trunc_df_days(df, how_many_days)
+
+    if interval == 'hourly':
+        pivot_by = 'dtm'
+        num_of_scrapes = df.groupby('dtm')['scrape_key'].nunique()
+    else:
+        pivot_by = 'dt'
+        num_of_scrapes = df.groupby('dt')['scrape_key'].nunique()
 
     df = pd.pivot_table(df,
                         index=['word'],
-                        columns=['dt'],
+                        columns=[pivot_by],
                         values='freq',
                         aggfunc=np.sum)
 
-    df = df / site_num
+    df = df.divide(num_of_scrapes, axis=1)
 
     df = df.fillna(0)
-    df['total'] = df.sum(axis=1)
-    df = df.sort_values(by='total', ascending=False)
-    df = df.iloc[:how_many, :-1]
 
-    datetimes = list(df.columns)
-    dates = [str(datetime)[:10] for datetime in datetimes]
-    words = list(df.index)
+    df['total'] = df.sum(axis=1)
+    df = df.sort_values(by='total', ascending=False).drop(['total'], axis=1)
+
+    df = df.iloc[:how_many_words, :]
+
+    dtms = list(df.columns)
+    trend_data['time_dim'] = [str(dtm)[:16] for dtm in dtms]
+
+    trend_data['words'] = list(df.index)
 
     value_list = []
+    for i in range(0, how_many_words):
+        vals = df.iloc[i, :]
+        vals = map(lambda x: round(x, 6) * 100, vals)
+        value_list.append(list(vals))
 
-    for i in range(0, how_many):
-        value_list.append(df.iloc[i, :].tolist())
+    trend_data['value_list'] = value_list
 
-    return dates, words, value_list
+    return trend_data
+
+
+def get_top_words(df, how_many_words, how_many_days):
+
+    top_data = {}
+
+    df = trunc_df_days(df, how_many_days)
+
+    num_of_scrapes = len(df.groupby(['dtm', 'site']))  # to be updated
+
+    ser = df.groupby(['word']) \
+            .sum() \
+            .sort_values(by='freq',
+                         ascending=False) \
+            .iloc[:how_many_words]['freq']
+
+    ser = ser / num_of_scrapes
+
+    ser = ser.map(lambda x: round(x, 6) * 100)
+
+    top_data['labels'] = list(ser.index)
+    top_data['values'] = list(ser)
+
+    return top_data
+
+
+def get_app_load_data(trend_words, top_words, hourly_days, daily_days):
+
+    app_load_data = {}
+    df = read_all()
+
+    app_load_data['top_words_hourly'] = get_top_words(df,
+                                                      top_words,
+                                                      hourly_days)
+
+    app_load_data['top_words_daily'] = get_top_words(df,
+                                                     top_words,
+                                                     daily_days)
+
+    app_load_data['trend_data_hourly'] = get_trend_data(df,
+                                                        trend_words,
+                                                        hourly_days,
+                                                        'hourly')
+
+    app_load_data['trend_data_daily'] = get_trend_data(df,
+                                                       trend_words,
+                                                       daily_days,
+                                                       'daily')
+
+    return app_load_data
 
 
 def read_site_titles(scrape_key):

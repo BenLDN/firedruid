@@ -10140,4 +10140,5 @@ Added by Ben
 
 .fire-title {font-size: 3vw;}
 .fire-text {font-size: 1vw;}
-.fire-chart-container {position: relative; height: 75vh}
+.fire-chart-container {height: 500px;
+                       width: 500px}

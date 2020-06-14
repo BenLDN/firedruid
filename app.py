@@ -1,8 +1,8 @@
 from flask import Flask, render_template
 import db_tools.db_reader as db_reader
 
-trends_colourlist = ["#4582EC", "#6f42c1", "#d9534f", "#fd7e14", "#02B875",
-                     "#e83e8c", "#f0ad4e", "#20c997", "#17a2b8", "#343a40"]
+colourlist = ["#4582EC", "#6f42c1", "#d9534f", "#fd7e14", "#02B875",
+              "#e83e8c", "#f0ad4e", "#20c997", "#17a2b8", "#343a40"]
 
 
 app = Flask(__name__)
@@ -11,24 +11,29 @@ app = Flask(__name__)
 @app.route("/")
 def root():
 
-    top_words = db_reader.top_words_7d()
-    words_labels = list(top_words.index)
-    words_values = map(lambda x: round(x, 6) * 100, list(top_words))
+    number_of_words_line = 5
+    number_of_words_bar = 20
+    number_of_days_hourly = 7
+    number_of_days_daily = 30
 
-    how_many = 5
-    trends_dates, trends_wordlist, trends_valuelist = \
-        db_reader.top_words_daily(how_many)
-
-    trends_valuelist = [list(map(lambda x: round(x, 6) * 100,
-                        list(values))) for values in trends_valuelist]
+    app_load_data = db_reader.get_app_load_data(number_of_words_line,
+                                                number_of_words_bar,
+                                                number_of_days_hourly,
+                                                number_of_days_daily)
 
     return render_template("index.html",
-                           words_labels=words_labels,
-                           words_values=words_values,
-                           trends_dates=trends_dates,
-                           trends_zip=zip(trends_wordlist,
-                                          trends_valuelist,
-                                          trends_colourlist))
+                           top_labels_hourly=list(app_load_data['top_words_hourly']['labels']),
+                           top_values_hourly=list(app_load_data['top_words_hourly']['values']),
+                           trend_time_dim_hourly=app_load_data['trend_data_hourly']['time_dim'],
+                           trend_hourly_zip=zip(app_load_data['trend_data_hourly']['words'],
+                                                app_load_data['trend_data_hourly']['value_list'],
+                                                colourlist),
+                           top_labels_daily=list(app_load_data['top_words_daily']['labels']),
+                           top_values_daily=list(app_load_data['top_words_daily']['values']),
+                           trend_time_dim_daily=app_load_data['trend_data_daily']['time_dim'],
+                           trend_daily_zip=zip(app_load_data['trend_data_daily']['words'],
+                                               app_load_data['trend_data_daily']['value_list'],
+                                               colourlist))
 
 
 if __name__ == "__main__":

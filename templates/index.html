@@ -26,8 +26,8 @@
              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#trends">Trends</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#words">Words</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#hourly">Hourly</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#daily">Daily</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#sites">Sites</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#author">Author</a></li>
@@ -36,23 +36,29 @@
         </nav>
         <!-- Page Content-->
         <div class="container-fluid p-0">
-            <!-- Trends-->
-            <section class="resume-section" id="trends">
+            <!-- Hourly-->
+            <section class="resume-section" id="hourly">
                 <div class="resume-section-content">
-                    <h2 class="fire-title">Trends</h2>
+                    <h2 class="fire-title">Hourly Charts</h2>
                     <p class="fire-text">Change in the frequency of the most common word in front page titles of the 15 most popular British news sites.</p>
-                        <div class="fire-chart-container">
-                            <canvas id="trendsChart"></canvas>
+                        <!-- Trends chart-->
+                        <div class="fire-chart-container", style="height: 500px; width: 500px; float:left;">
+                            <canvas id="hourlyTrendsChart"></canvas>
                         </div>
+                        <!-- Bar chart-->
+                        <div class="fire-chart-container", style="height: 500px; width: 500px; float:left;">
+                            <canvas id="hourlyTopChart"></canvas>
+                        </div>
+
                         <script>
                               Chart.defaults.global.responsive = true;
 
-                              var chartData = {
-                                labels : [{% for label in trends_dates %}
-                                           "{{label}}",
+                              var hourlyTrendsChartData = {
+                                labels : [{% for dim in trend_time_dim_hourly %}
+                                           "{{dim}}",
                                           {% endfor %}],
                                 datasets : [
-                                    {% for word, values, colour in trends_zip %}
+                                    {% for word, values, colour in trend_hourly_zip %}
                                     {
                                     label: '{{ word }}',
                                     fill: false,
@@ -71,12 +77,12 @@
                               ]
                               }
 
-                              var ctx = document.getElementById("trendsChart").getContext("2d");
+                              var ctx = document.getElementById("hourlyTrendsChart").getContext("2d");
 
-                              var trendsChart = new Chart(ctx, {
+                              var hourlyTrendsChart = new Chart(ctx, {
                                 type: 'line',
-                                data: chartData,
-                                options: {
+                                data: hourlyTrendsChartData,
+                                options: {maintainAspectRatio: false,
 
                                 scales: {
                                     
@@ -97,44 +103,160 @@
                               });
                             </script>
 
-
-                </div>
-            </section>
-            <hr class="m-0" />
-            <!-- Words-->
-            <section class="resume-section" id="words">
-                <div class="resume-section-content">
-                    <h2 class="fire-title">Words</h2>
-                    <p class="fire-text">Top 10 most common words in front page titles of the 15 most popular British news sites in the last 7 days.</p>
-                        <div class="fire-chart-container">
-                            <canvas id="wordChart"></canvas>
-                        </div>
-                        <script>
+                            <script>
                             Chart.defaults.global.responsive = true;
                             Chart.defaults.global.legend.display = false;
 
-                            var wordData = 
+                            var hourlyTopChartData = 
                                 {
 
-                                labels : [{% for label in words_labels %}
+                                labels : [{% for label in top_labels_hourly %}
                                            "{{label}}",
                                           {% endfor %}],
                                 datasets : [{
                                     backgroundColor: "#dc3545",
-                                    data : [{% for item in words_values %}
-                                              {{item}},
+                                    data : [{% for val in top_values_hourly %}
+                                              {{val}},
                                             {% endfor %}]
 
                                            }]
                                 }
 
-                              var ctx = document.getElementById("wordChart").getContext("2d");
+                              var ctx = document.getElementById("hourlyTopChart").getContext("2d");
 
-                              var wordChart = new Chart(ctx, {
+                              var hourlyTopChart = new Chart(ctx, {
                                 type: 'horizontalBar',
-                                data: wordData,
+                                data: hourlyTopChartData,
 
-                                options: {
+                                options: {maintainAspectRatio: false,
+                                    tooltips: {
+                                        custom: function(tooltip) {
+                                            if (!tooltip) return;
+                                            // disable displaying the color box;
+                                            tooltip.displayColors = false;
+                                          },
+
+                                      callbacks: {
+                                        label: function(tooltipItem, data) {
+                                          return data['datasets'][0]['data'][tooltipItem['index']] + '%';
+                                                        }
+                                                      }
+                                                    },
+                                scales: {
+                                    
+                                    xAxes: [{
+                                    ticks: {
+                                    
+                                           min: 0,
+                                           callback: function(value){return value.toFixed(2)+ "%"}
+                                        },  
+                                        scaleLabel: {
+                                           display: false,
+                                        }
+                                    }]
+                                }
+                            }
+
+                              });
+                        </script>
+
+
+                </div>
+            </section>
+            <hr class="m-0" />
+            <!-- Daily-->
+            <section class="resume-section" id="daily">
+                <div class="resume-section-content">
+                    <h2 class="fire-title">Daily Charts</h2>
+                    <p class="fire-text">Placeholder for description</p>
+                        <!-- Trends chart-->
+                        <div class="fire-chart-container", style="height: 500px; width: 500px; float:left;">
+                            <canvas id="dailyTrendsChart"></canvas>
+                        </div>
+                        <!-- Bar chart-->
+                        <div class="fire-chart-container", style="height: 500px; width: 500px; float:left;">
+                            <canvas id="dailyTopChart"></canvas>
+                        </div>
+
+                        <script>
+                              Chart.defaults.global.responsive = true;
+
+                              var dailyTrendsChartData = {
+                                labels : [{% for dim in trend_time_dim_daily %}
+                                           "{{dim}}",
+                                          {% endfor %}],
+                                datasets : [
+                                    {% for word, values, colour in trend_daily_zip %}
+                                    {
+                                    label: '{{ word }}',
+                                    fill: false,
+                                    lineTension: 0.3,
+                                    borderColor: "{{colour}}",
+                                    pointHoverRadius: 5,
+                                    pointHoverBackgroundColor: "{{colour}}",
+                                    pointHoverBorderColor: "{{colour}}",
+                                    pointRadius: 1,
+                                    pointHitRadius: 15,
+                                    data : {{values}},
+
+                                    },
+                                    {% endfor %}
+
+                              ]
+                              }
+
+                              var ctx = document.getElementById("dailyTrendsChart").getContext("2d");
+
+                              var dailyTrendsChart = new Chart(ctx, {
+                                type: 'line',
+                                data: dailyTrendsChartData,
+                                options: {maintainAspectRatio: false,
+
+                                scales: {
+                                    
+                                    yAxes: [{
+                                    ticks: {
+                                    
+                                           min: 0,
+                                           callback: function(value){return value.toFixed(2)+ "%"}
+                                        },  
+                                        scaleLabel: {
+                                           display: true,
+                                           labelString: "Word Frequency"
+                                        }
+                                    }]
+                                }
+                            }
+
+                              });
+                            </script>
+
+                            <script>
+                            Chart.defaults.global.responsive = true;
+                            Chart.defaults.global.legend.display = false;
+
+                            var dailyTopChartData = 
+                                {
+
+                                labels : [{% for label in top_labels_daily %}
+                                           "{{label}}",
+                                          {% endfor %}],
+                                datasets : [{
+                                    backgroundColor: "#dc3545",
+                                    data : [{% for val in top_values_daily %}
+                                              {{val}},
+                                            {% endfor %}]
+
+                                           }]
+                                }
+
+                              var ctx = document.getElementById("dailyTopChart").getContext("2d");
+
+                              var dailyTopChart = new Chart(ctx, {
+                                type: 'horizontalBar',
+                                data: dailyTopChartData,
+
+                                options: {maintainAspectRatio: false,
                                     tooltips: {
                                         custom: function(tooltip) {
                                             if (!tooltip) return;
