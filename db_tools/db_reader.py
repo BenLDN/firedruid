@@ -60,7 +60,7 @@ def transform_data(df,
 
     df = df.fillna(0)
 
-    ser = df.sum(axis=1).sort_values(ascending=False)[:how_many_words_top]
+    ser = df.mean(axis=1).sort_values(ascending=False)[:how_many_words_top]
 
     ser = ser.map(lambda x: round(x, 6) * 100)
 
