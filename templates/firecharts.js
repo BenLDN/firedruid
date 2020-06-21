@@ -6,7 +6,7 @@ var hourlyTrendsChartData = {
 
     labels: [{%for dim in trend_time_dim_hourly %} "{{dim}}", {% endfor %}],
 
-    datasets: [{% for word, values, colour in trend_hourly_zip %} 
+    datasets: [{% for word, values, colour in trend_hourly_zip %}
           {
             label: '{{ word }}',
             fill: false,
@@ -48,8 +48,7 @@ var hourlyTrendsChart = new Chart(ctx, {
                     }
                 },
                 scaleLabel: {
-                    display: true,
-                    labelString: "Word Frequency"
+                    display: false,
                 }
             }]
         }
@@ -126,7 +125,7 @@ var dailyTrendsChartData = {
 
     labels: [{% for dim in trend_time_dim_daily %} "{{dim}}", {% endfor %}],
 
-    datasets: [{% for word, values, colour in trend_daily_zip %} 
+    datasets: [{% for word, values, colour in trend_daily_zip %}
           {
             label: '{{ word }}',
             fill: false,
@@ -169,8 +168,7 @@ var dailyTrendsChart = new Chart(ctx, {
                     }
                 },
                 scaleLabel: {
-                    display: true,
-                    labelString: "Word Frequency"
+                    display: false,
                 }
             }]
         }
