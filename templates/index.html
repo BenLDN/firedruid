@@ -1,134 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>FireDruid</title>
-        <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}" />
-        <!-- Font Awesome icons (free version)-->
-        <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
-        <!-- Google fonts-->
-        <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
-        <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
-        <!-- chart.js -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-    </head>
-    <body id="page-top">
-        <!-- Navigation-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
-            <a class="navbar-brand js-scroll-trigger" href="#page-top">
-                <span class="d-block d-lg-none">FireDruid</span><span class="d-none d-lg-block"><img style="max-width: 50%; height: auto"; src="{{ url_for('static', filename='img/fire.png') }}" alt="" /></span>
-            </a>
-             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#hourly">Hourly</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#daily">Daily</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#sites">Sites</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#author">Author</a></li>
-                </ul>
-            </div>
-        </nav>
-        <!-- Page Content-->
-        <div class="container-fluid p-0">
-            <!-- Hourly-->
-            <section class="resume-section" id="hourly">
-                <div class="resume-section-content">
-                    <h2 class="fire-title">Hourly Charts</h2>
-                    <p class="fire-text">Frequency of words in the headlines of British news sites.</p>
-                        <!-- Trends chart-->
-                        <div class="fire-chart-container", style="height: 500px; width: 500px; float:left;">
-                            <canvas id="hourlyTrendsChart"></canvas>
-                        </div>
-                        <!-- Bar chart-->
-                        <div class="fire-chart-container", style="height: 500px; width: 500px; float:left;">
-                            <canvas id="hourlyTopChart"></canvas>
-                        </div>
 
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>FireDruid</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}" />
+    <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
+</head>
 
+<body id="page-top">
 
- 
-
-
-                </div>
-            </section>
-            <hr class="m-0" />
-            <!-- Daily-->
-            <section class="resume-section" id="daily">
-                <div class="resume-section-content">
-                    <h2 class="fire-title">Daily Charts</h2>
-                    <p class="fire-text">Frequency of words in the headlines of British news sites.</p>
-                        <!-- Trends chart-->
-                        <div class="fire-chart-container", style="height: 500px; width: 500px; float:left;">
-                            <canvas id="dailyTrendsChart"></canvas>
-                        </div>
-                        <!-- Bar chart-->
-                        <div class="fire-chart-container", style="height: 500px; width: 500px; float:left;">
-                            <canvas id="dailyTopChart"></canvas>
-                        </div>
-
-     
-
-
-                </div>
-            </section>
-            <hr class="m-0" />
-            <!-- Sites-->
-            <section class="resume-section" id="sites">
-                <div class="resume-section-content">
-                    <h2 class="fire-title">More Charts</h2>
-                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
-                        <p class="fire-text">Placeholder for more charts</p>
-                    </div>
-                </div>
-            </section>
-            <hr class="m-0" />
-            <!-- About-->
-            <section class="resume-section" id="about">
-                <div class="resume-section-content">
-                    <h2 class="fire-title">About</h2>
-                    <div class="resume-section-content">
-                        <p>FireDruid scrapes the front-page headlines of the 15 most popular British news sites every hour (at half past). <br>
-                        The charts show the frequency of words in these headlines after removing common words like "the", "she", "is", etc.  </p>
-                        Source code: <a href="https://github.com/BenLDN/firedruid" target="_blank">GitHub</a>
-                            (<a href="https://github.com/BenLDN/firedruid/blob/master/app_structure.png" target="_blank">app structure</a>, 
-                            <a href="https://github.com/BenLDN/firedruid/blob/master/db_structure.png" target="_blank">database structure</a>) <br>
-                        Front-end template: <a href="https://startbootstrap.com/themes/resume/" target="_blank">Start Bootstrap</a> <br>
-                        Main packages used: 
-                            <a href="https://palletsprojects.com/p/flask/" target="_blank">Flask</a>, 
-                            <a href="https://www.sqlite.org/" target="_blank">SQLite</a>, 
-                            <a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/" target="_blank">BeautifulSoup</a>, 
-                            <a href="https://pandas.pydata.org/" target="_blank">Pandas</a>, 
-                            <a href="https://www.chartjs.org/" target="_blank">Chart.js</a> <br>
-                        Hosted on <a href="https://www.pythonanywhere.com/" target="_blank">PythonAnywhere</a>
-                    </div>
-                </div>
-            </section>
-            <hr class="m-0" />
-            <!-- Author-->
-            <section class="resume-section" id="author">
-                <div class="resume-section-content">
-                    <h2 class="fire-title">Author</h2>
-                        <p>Bio placeholder</p>
-                        <a href="https://github.com/BenLDN" target="_blank">GitHub</a> <br>
-                        <a href="https://uk.linkedin.com/in/benkulcsar" target="_blank">LinkedIn</a>
-                </div>
-            </section>
-            <hr class="m-0" />
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">
+            <span class="d-block d-lg-none">FireDruid</span><span class="d-none d-lg-block"><img style="max-width: 50%; height: auto" src="{{ url_for('static', filename='img/fire.png') }}" alt="" /></span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#hourly">Hourly</a></li>
+                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#daily">Daily</a></li>
+                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#sites">Sites</a></li>
+                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
+                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#author">Author</a></li>
+            </ul>
         </div>
-        <!-- Bootstrap core JS-->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
-        <!-- Third party plugin JS-->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-        <!-- Core theme JS-->
-        <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
-        <script type="text/javascript"> {% include "firecharts.js" %} </script>
+    </nav>
 
-    </body>
+
+    <!-- Page Content-->
+    <div class="container-fluid p-0">
+
+
+        <!-- Hourly-->
+        <section class="resume-section" id="hourly">
+            <div class="resume-section-content">
+                <h2 class="fire-title">Hourly Charts</h2>
+                <p class="fire-text">Frequency of words in the headlines of British news sites.</p>
+                <!-- Trends chart-->
+                <div class="fire-chart-container" , style="height: 500px; width: 500px; float:left;">
+                    <canvas id="hourlyTrendsChart"></canvas>
+                </div>
+                <!-- Bar chart-->
+                <div class="fire-chart-container" , style="height: 500px; width: 500px; float:left;">
+                    <canvas id="hourlyTopChart"></canvas>
+                </div>
+            </div>
+        </section>
+        <hr class="m-0" />
+
+
+        <!-- Daily-->
+        <section class="resume-section" id="daily">
+            <div class="resume-section-content">
+                <h2 class="fire-title">Daily Charts</h2>
+                <p class="fire-text">Frequency of words in the headlines of British news sites.</p>
+                <!-- Trends chart-->
+                <div class="fire-chart-container" , style="height: 500px; width: 500px; float:left;">
+                    <canvas id="dailyTrendsChart"></canvas>
+                </div>
+                <!-- Bar chart-->
+                <div class="fire-chart-container" , style="height: 500px; width: 500px; float:left;">
+                    <canvas id="dailyTopChart"></canvas>
+                </div>
+            </div>
+        </section>
+        <hr class="m-0" />
+
+
+        <!-- Sites-->
+        <section class="resume-section" id="sites">
+            <div class="resume-section-content">
+                <h2 class="fire-title">More Charts</h2>
+                <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                    <p class="fire-text">Placeholder for more charts</p>
+                </div>
+            </div>
+        </section>
+        <hr class="m-0" />
+
+
+        <!-- About-->
+        <section class="resume-section" id="about">
+            <div class="resume-section-content">
+                <h2 class="fire-title">About</h2>
+                <div class="resume-section-content">
+                    <p>FireDruid scrapes the front-page headlines of the 15 most popular British news sites every hour (at half past). <br>
+                        The charts show the frequency of words in these headlines after removing common words like "the", "she", "is", etc. </p>
+                    Source code: <a href="https://github.com/BenLDN/firedruid" target="_blank">GitHub</a>
+                    (<a href="https://github.com/BenLDN/firedruid/blob/master/app_structure.png" target="_blank">app structure</a>,
+                    <a href="https://github.com/BenLDN/firedruid/blob/master/db_structure.png" target="_blank">database structure</a>) <br>
+                    Front-end template: <a href="https://startbootstrap.com/themes/resume/" target="_blank">Start Bootstrap</a> <br>
+                    Main packages used:
+                    <a href="https://palletsprojects.com/p/flask/" target="_blank">Flask</a>,
+                    <a href="https://www.sqlite.org/" target="_blank">SQLite</a>,
+                    <a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/" target="_blank">BeautifulSoup</a>,
+                    <a href="https://pandas.pydata.org/" target="_blank">Pandas</a>,
+                    <a href="https://www.chartjs.org/" target="_blank">Chart.js</a> <br>
+                    Hosted on <a href="https://www.pythonanywhere.com/" target="_blank">PythonAnywhere</a>
+                </div>
+            </div>
+        </section>
+        <hr class="m-0" />
+
+
+        <!-- Author-->
+        <section class="resume-section" id="author">
+            <div class="resume-section-content">
+                <h2 class="fire-title">Author</h2>
+                <p>Bio placeholder</p>
+                <a href="https://github.com/BenLDN" target="_blank">GitHub</a> <br>
+                <a href="https://uk.linkedin.com/in/benkulcsar" target="_blank">LinkedIn</a>
+            </div>
+        </section>
+        <hr class="m-0" />
+    </div>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+    <!-- Third party plugin JS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    <!-- Charts JS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script type="text/javascript"> {% include "firecharts.js" %} </script>
+
+</body>
+
 </html>
