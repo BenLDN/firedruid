@@ -14,7 +14,7 @@ def load_config():
 
 def read_excluded_words(excluded_words_file):
 
-    with open('excluded_words.json', 'r') as exc_file:
+    with open(excluded_words_file, 'r') as exc_file:
         excluded_words = json.load(exc_file)
 
     return set(excluded_words)
