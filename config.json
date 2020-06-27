@@ -1,10 +1,11 @@
 {
   "processed_db_path": "./processed_data.db",
-  "excluded_words_file": "exclude_words.json",
+  "excluded_words_file": "./exclude_words.json",
   "words_stored": 30,
-  "news_sites_file": "news_sites.json",
+  "news_sites_file": "./news_sites.json",
   "raw_db_path": "./raw_data.db",
   "min_word_length": 3,
+  "frontend_json": "./frontend.json",
 
   "number_of_words_line" : 5,
   "number_of_words_bar" : 20,

@@ -15,10 +15,9 @@ def root():
     with open('config.json', 'r') as file:
         config = json.load(file)
 
-    app_load_data = db_reader.get_app_load_data(config['number_of_words_line'],
-                                                config['number_of_words_bar'],
-                                                config['number_of_days_hourly'],
-                                                config['number_of_days_daily'])
+
+    with open(config['frontend_json'], 'r') as file:
+        app_load_data = json.load(file)
 
     return render_template("index.html",
        top_labels_hourly=list(app_load_data['top_words_hourly']['labels']),

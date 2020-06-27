@@ -48,6 +48,17 @@ def process_scraped_data(scrape_keys, words_stored):
         db_writer.store_words(words_tuple_list, scrape_key, site, day, hour)
 
 
+def generate_frontend_json(frontend_json):
+
+    app_load_data = db_reader.get_app_load_data(config['number_of_words_line'],
+                                                config['number_of_words_bar'],
+                                                config['number_of_days_hourly'],
+                                                config['number_of_days_daily'])
+
+    with open(frontend_json, 'w') as file:
+        json.dump(app_load_data, file, indent=2)
+
+
 if __name__ == '__main__':
 
     with open('config.json', 'r') as file:
@@ -55,3 +66,5 @@ if __name__ == '__main__':
 
     scrape_keys = scrape_all_sites(config['news_sites_file'])
     process_scraped_data(scrape_keys, config['words_stored'])
+
+    generate_frontend_json(config['frontend_json'])
