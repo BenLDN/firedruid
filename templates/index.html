@@ -40,10 +40,10 @@
                 <h2>Hourly Charts</h2>
                 <p>Frequency of words in the headlines of British news sites.</p>
 
-                <select name="testa" id="testa" onchange=";logg(document.getElementById('testa').value);">
-                  <option value="all">Show all</option>
-                  <option value="from22">From 22 Jun</option>
-                  <option value="from23">From 23 Jun</option>
+                <select name="choose-week" id="choose-week" onchange=";change_week(document.getElementById('choose-week').value);">
+                    {%for key in app_load_data.keys() %}
+                    <option value="{{key}}">{{key}}</option>
+                    {% endfor %}
                 </select>
 
                 <div class="row">

@@ -1,23 +1,92 @@
+Chart.defaults.global.responsive = true;
+
+app_data = {{app_load_data}}
+
+function load_data(key) {
+    trend_time_dim_hourly = app_data['latest']['trend_data_hourly']['time_dim'];
+    trend_words_hourly = app_data['latest']['trend_data_hourly']['words'];
+    trend_values_hourly = app_data['latest']['trend_data_hourly']['value_list'];
+    top_labels_hourly = app_data[key]['top_words_hourly']['labels'];
+    top_values_hourly = app_data[key]['top_words_hourly']['values'];
+}
+
+load_data('latest')
+
+function change_week(wk) {
+    load_data(wk);
+    load_hourlyTopChart()
+
+}
+
+
+// HOURLY BAR CHART ===============================================================
+
+function load_hourlyTopChart() {
+
+    hourlyTopChartData = {
+
+        labels: top_labels_hourly,
+
+        datasets: [{
+            backgroundColor: "#dc3545",
+            data: top_values_hourly
+
+        }]
+    };
+
+    ctx2 = document.getElementById("hourlyTopChart").getContext("2d");
+
+    hourlyTopChart = new Chart(ctx2, {
+        type: 'horizontalBar',
+        data: hourlyTopChartData,
+        options: {
+            maintainAspectRatio: false,
+            legend: {
+                display: false
+            },
+            title: {
+                display: true,
+                text: 'Word frequency in the last 7 days (top 20 words, total)'
+            },
+            tooltips: {
+                custom: function(tooltip) {
+                    if (!tooltip) return;
+                    // disable displaying the color box;
+                    tooltip.displayColors = false;
+                },
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        return data['datasets'][0]['data'][tooltipItem['index']] + '%';
+                    }
+                }
+            },
+            scales: {
+                xAxes: [{
+                    ticks: {
+                        min: 0,
+                        callback: function(value) {
+                            return value.toFixed(2) + "%"
+                        }
+                    },
+                    scaleLabel: {
+                        display: false,
+                    }
+                }]
+            }
+        }
+
+    });
+
+}
+
+load_hourlyTopChart()
+
 // HOURLY LINE GRAPH ===============================================================
 
-// var hourly_trend_labels = [{%for dim in trend_time_dim_hourly %} "{{dim}}", {% endfor %}]
-
-// function logg(txt) {
-//     switch (txt) {
-//         case "from22": hourlyTrendsChart.data.labels = [{%for dim in trend_time_dim_hourly %} "22", {% endfor %}]; break;
-//         case "from23": hourlyTrendsChart.data.labels = [{%for dim in trend_time_dim_hourly %} "23", {% endfor %}]; break;
-//         default: hourlyTrendsChart.data.labels = hourly_trend_labels;
-//     }
-//     hourlyTrendsChart.update()
-// }
-
-////
-
-Chart.defaults.global.responsive = true;
 
 var hourlyTrendsChartData = {
 
-    labels: [{%for dim in trend_time_dim_hourly %} "{{dim}}", {% endfor %}],
+    labels: trend_time_dim_hourly,
 
     datasets: [{% for word, values, colour in trend_hourly_zip %}
           {
@@ -64,61 +133,7 @@ var hourlyTrendsChart = new Chart(ctx1, {
     }
 });
 
-// HOURLY BAR CHART ===============================================================
 
-var hourlyTopChartData = {
-
-    labels: [{% for label in top_labels_hourly %} "{{label}}", {% endfor %}],
-
-    datasets: [{
-        backgroundColor: "#dc3545",
-        data: [{% for val in top_values_hourly %} {{val}}, {% endfor %}]
-
-    }]
-};
-
-var ctx2 = document.getElementById("hourlyTopChart").getContext("2d");
-
-var hourlyTopChart = new Chart(ctx2, {
-    type: 'horizontalBar',
-    data: hourlyTopChartData,
-    options: {
-        maintainAspectRatio: false,
-        legend: {
-            display: false
-        },
-        title: {
-            display: true,
-            text: 'Word frequency in the last 7 days (top 20 words, total)'
-        },
-        tooltips: {
-            custom: function(tooltip) {
-                if (!tooltip) return;
-                // disable displaying the color box;
-                tooltip.displayColors = false;
-            },
-            callbacks: {
-                label: function(tooltipItem, data) {
-                    return data['datasets'][0]['data'][tooltipItem['index']] + '%';
-                }
-            }
-        },
-        scales: {
-            xAxes: [{
-                ticks: {
-                    min: 0,
-                    callback: function(value) {
-                        return value.toFixed(2) + "%"
-                    }
-                },
-                scaleLabel: {
-                    display: false,
-                }
-            }]
-        }
-    }
-
-});
 
 // DAILY LINE GRAPH ================================================================
 
