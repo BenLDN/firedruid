@@ -17,7 +17,9 @@ def root():
 
 
     with open(config['frontend_json'], 'r') as file:
-        app_load_data = json.load(file)
+        app_load_data2 = json.load(file)
+
+    app_load_data = app_load_data2['latest']
 
     return render_template("index.html",
        top_labels_hourly=list(app_load_data['top_words_hourly']['labels']),

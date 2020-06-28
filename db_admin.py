@@ -1,4 +1,5 @@
 import sys
+import json
 import pandas as pd
 import main_scraper
 import db_tools.db_operations as db_operations
@@ -66,6 +67,11 @@ def rerun_processing():
     main_scraper.process_scraped_data(scrape_keys, words_stored)
 
 
+def rerun_frontend(config):
+    main_scraper.generate_frontend_json(config)
+    print('Done')
+
+
 def run_sql():
 
     text = '''Database to use: "raw" (default) or "processed"? '''
@@ -94,12 +100,16 @@ def run_sql():
 
 if __name__ == '__main__':
 
+    with open('config.json', 'r') as file:
+        config = json.load(file)
+
     helptxt = '''Options:
 
                  raw-to-csv,
                  processed-to-csv,
                  recreate-db,
                  rerun-processing,
+                 rerun-frontend,
                  run-sql'''
 
     if len(sys.argv) != 2:
@@ -116,6 +126,9 @@ if __name__ == '__main__':
 
     elif sys.argv[1] == 'rerun-processing':
         rerun_processing()
+
+    elif sys.argv[1] == 'rerun-frontend':
+        rerun_frontend(config)
 
     elif sys.argv[1] == 'run-sql':
         run_sql()
