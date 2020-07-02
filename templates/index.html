@@ -41,7 +41,7 @@
                 <p>Frequency of words in the headlines of British news sites.</p>
 
                 <select name="choose-week" id="choose-week" onchange=";change_week(document.getElementById('choose-week').value);">
-                    {%for key in app_load_data.keys() %}
+                    {%for key in app_load_data['hourly'].keys() %}
                     <option value="{{key}}">{{key}}</option>
                     {% endfor %}
                 </select>

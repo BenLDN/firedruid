@@ -17,26 +17,24 @@ def root():
 
 
     with open(config['frontend_json'], 'r') as file:
-        app_load_data2 = json.load(file)
-
-    app_load_data = app_load_data2['latest']
+        app_load_data = json.load(file)
 
     return render_template("index.html",
 
-    	app_load_data = app_load_data2,
+    	app_load_data = app_load_data,
     	colourlist = colourlist,
 
-        top_labels_hourly=list(app_load_data['top_words_hourly']['labels']),
-        top_values_hourly=list(app_load_data['top_words_hourly']['values']),
-        trend_time_dim_hourly=app_load_data['trend_data_hourly']['time_dim'],
-        trend_hourly_zip=zip(app_load_data['trend_data_hourly']['words'],
-                             app_load_data['trend_data_hourly']['value_list'],
+        top_labels_hourly=list(app_load_data['hourly']['latest']['top_words_hourly']['labels']),
+        top_values_hourly=list(app_load_data['hourly']['latest']['top_words_hourly']['values']),
+        trend_time_dim_hourly=app_load_data['hourly']['latest']['trend_data_hourly']['time_dim'],
+        trend_hourly_zip=zip(app_load_data['hourly']['latest']['trend_data_hourly']['words'],
+                             app_load_data['hourly']['latest']['trend_data_hourly']['value_list'],
                              colourlist),
-        top_labels_daily=list(app_load_data['top_words_daily']['labels']),
-        top_values_daily=list(app_load_data['top_words_daily']['values']),
-        trend_time_dim_daily=app_load_data['trend_data_daily']['time_dim'],
-        trend_daily_zip=zip(app_load_data['trend_data_daily']['words'],
-                            app_load_data['trend_data_daily']['value_list'],
+        top_labels_daily=list(app_load_data['daily']['latest']['top_words_daily']['labels']),
+        top_values_daily=list(app_load_data['daily']['latest']['top_words_daily']['values']),
+        trend_time_dim_daily=app_load_data['daily']['latest']['trend_data_daily']['time_dim'],
+        trend_daily_zip=zip(app_load_data['daily']['latest']['trend_data_daily']['words'],
+                            app_load_data['daily']['latest']['trend_data_daily']['value_list'],
                             colourlist))
 
 

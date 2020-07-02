@@ -3,11 +3,11 @@ Chart.defaults.global.responsive = true;
 app_data = {{app_load_data}}
 
 function load_data(key) {
-    trend_time_dim_hourly = app_data['latest']['trend_data_hourly']['time_dim'];
-    trend_words_hourly = app_data['latest']['trend_data_hourly']['words'];
-    trend_values_hourly = app_data['latest']['trend_data_hourly']['value_list'];
-    top_labels_hourly = app_data[key]['top_words_hourly']['labels'];
-    top_values_hourly = app_data[key]['top_words_hourly']['values'];
+    trend_time_dim_hourly = app_data['hourly']['latest']['trend_data_hourly']['time_dim'];
+    trend_words_hourly = app_data['hourly']['latest']['trend_data_hourly']['words'];
+    trend_values_hourly = app_data['hourly']['latest']['trend_data_hourly']['value_list'];
+    top_labels_hourly = app_data['hourly'][key]['top_words_hourly']['labels'];
+    top_values_hourly = app_data['hourly'][key]['top_words_hourly']['values'];
 }
 
 load_data('latest')
@@ -84,56 +84,60 @@ load_hourlyTopChart()
 // HOURLY LINE GRAPH ===============================================================
 
 
-var hourlyTrendsChartData = {
+function load_hourlyTrendsChart() {
 
-    labels: trend_time_dim_hourly,
+    var hourlyTrendsChartData = {
 
-    datasets: [{% for word, values, colour in trend_hourly_zip %}
-          {
-            label: '{{ word }}',
-            fill: false,
-            lineTension: 0.3,
-            borderColor: "{{colour}}",
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: "{{colour}}",
-            pointHoverBorderColor: "{{colour}}",
-            pointRadius: 1,
-            pointHitRadius: 15,
-            data: {{values}},
-          },
-        {% endfor %}
+        labels: trend_time_dim_hourly,
 
-    ]
-};
+        datasets: [{% for word, values, colour in trend_hourly_zip %}
+              {
+                label: '{{ word }}',
+                fill: false,
+                lineTension: 0.3,
+                borderColor: "{{colour}}",
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "{{colour}}",
+                pointHoverBorderColor: "{{colour}}",
+                pointRadius: 1,
+                pointHitRadius: 15,
+                data: {{values}},
+              },
+            {% endfor %}
 
-var ctx1 = document.getElementById("hourlyTrendsChart").getContext("2d");
+        ]
+    };
 
-var hourlyTrendsChart = new Chart(ctx1, {
-    type: 'line',
-    data: hourlyTrendsChartData,
-    options: {
-        maintainAspectRatio: false,
-        title: {
-            display: true,
-            text: 'Word frequency in the last 7 days (top 5 words, hourly)'
-        },
-        scales: {
-            yAxes: [{
-                ticks: {
-                    min: 0,
-                    callback: function(value) {
-                        return value.toFixed(2) + "%"
+    var ctx1 = document.getElementById("hourlyTrendsChart").getContext("2d");
+
+    var hourlyTrendsChart = new Chart(ctx1, {
+        type: 'line',
+        data: hourlyTrendsChartData,
+        options: {
+            maintainAspectRatio: false,
+            title: {
+                display: true,
+                text: 'Word frequency in the last 7 days (top 5 words, hourly)'
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        min: 0,
+                        callback: function(value) {
+                            return value.toFixed(2) + "%"
+                        }
+                    },
+                    scaleLabel: {
+                        display: false,
                     }
-                },
-                scaleLabel: {
-                    display: false,
-                }
-            }]
+                }]
+            }
         }
-    }
-});
+    });
 
+}
 
+load_hourlyTrendsChart()
 
 // DAILY LINE GRAPH ================================================================
 

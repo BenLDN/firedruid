@@ -4,6 +4,25 @@ import pandas as pd
 import db_tools.db_operations as db_operations
 
 
+def read_site_titles(scrape_key):
+
+    conn = db_operations.db_connect('raw')
+
+    sql_titles = 'SELECT * FROM titles WHERE fk_scrapes = ' + str(scrape_key)
+    sql_scrape = 'SELECT * FROM scrapes WHERE pk_scrapes = ' + str(scrape_key)
+
+    raw_titles = db_operations.execute_sql(conn, sql_titles)
+    scrape = db_operations.execute_sql(conn, sql_scrape)
+
+    site_titles = [title_item[2]
+                   for title_item in raw_titles
+                   if title_item[1] == scrape_key]
+
+    db_operations.db_close(conn)
+
+    return site_titles, scrape[0]
+
+
 def read_all():
 
     conn = db_operations.db_connect('processed')
@@ -25,15 +44,16 @@ def read_all():
     return df
 
 
-def trunc_df_days(df, how_many_days):
-    day_delta = str(how_many_days) + "day"
-    return df[df.dtm >= datetime.datetime.now() - pd.to_timedelta(day_delta)]
+def trunc_df_days(df, start_day, end_day):
+    #day_delta = str(how_many_days) + "day"
+    return df[(df.dtm >= start_day) & (df.dtm <= end_day)]
 
 
 def transform_data(df,
                    how_many_words_trend,
                    how_many_words_top,
-                   how_many_days,
+                   start_day,
+                   end_day,
                    interval):
 
     # TODO: this function should be broken down into multipl smaller functions
@@ -41,7 +61,7 @@ def transform_data(df,
     trend_data = {}
     top_data = {}
 
-    df = trunc_df_days(df, how_many_days)
+    df = trunc_df_days(df, start_day, end_day)
 
     if interval == 'hourly':
         pivot_by = 'dtm'
@@ -91,39 +111,41 @@ def transform_data(df,
 def get_app_load_data(trend_words, top_words, hourly_days, daily_days):
 
     app_load_data = {}
+    app_load_data['hourly'] = {}
+    app_load_data['daily'] = {}
+
     df = read_all()
 
-    app_load_data['trend_data_hourly'], \
-        app_load_data['top_words_hourly'] = transform_data(df,
-                                                           trend_words,
-                                                           top_words,
-                                                           hourly_days,
-                                                           'hourly')
+    date_ranges_hourly = [['2020-06-08', datetime.datetime(2020, 6, 8, 0, 1), datetime.datetime(2020, 6, 15, 0, 1)],
+                          ['2020-06-15', datetime.datetime(2020, 6, 15, 0, 1), datetime.datetime(2020, 6, 22, 0, 1)],
+                          ['latest', datetime.datetime(2020, 6, 18, 0, 1), datetime.datetime(2020, 6, 25, 0, 1)]]
 
-    app_load_data['trend_data_daily'], \
-        app_load_data['top_words_daily'] = transform_data(df,
+    start_day_daily = datetime.datetime(2020, 6, 1, 0, 1)
+    end_day_daily = datetime.datetime(2020, 6, 30, 0, 1)
+
+    for daterange in date_ranges_hourly:
+
+        app_load_data['hourly'][daterange[0]] = {}
+
+        app_load_data['hourly'][daterange[0]]['trend_data_hourly'], \
+            app_load_data['hourly'][daterange[0]]['top_words_hourly'] = transform_data(df,
+                                                                         trend_words,
+                                                                         top_words,
+                                                                         daterange[1],
+                                                                         daterange[2],
+                                                                         'hourly')
+
+    app_load_data['daily']['latest'] = {}
+
+    app_load_data['daily']['latest']['trend_data_daily'], \
+        app_load_data['daily']['latest']['top_words_daily'] = transform_data(df,
                                                           trend_words,
                                                           top_words,
-                                                          daily_days,
+                                                          start_day_daily,
+                                                          end_day_daily,
                                                           'daily')
 
     return app_load_data
 
 
-def read_site_titles(scrape_key):
 
-    conn = db_operations.db_connect('raw')
-
-    sql_titles = 'SELECT * FROM titles WHERE fk_scrapes = ' + str(scrape_key)
-    sql_scrape = 'SELECT * FROM scrapes WHERE pk_scrapes = ' + str(scrape_key)
-
-    raw_titles = db_operations.execute_sql(conn, sql_titles)
-    scrape = db_operations.execute_sql(conn, sql_scrape)
-
-    site_titles = [title_item[2]
-                   for title_item in raw_titles
-                   if title_item[1] == scrape_key]
-
-    db_operations.db_close(conn)
-
-    return site_titles, scrape[0]
