@@ -116,24 +116,53 @@ def get_app_load_data(trend_words, top_words, hourly_days, daily_days):
 
     df = read_all()
 
+    last_week_start = df.dtm.max() - pd.to_timedelta(7, unit='d')
+    last_week_end = df.dtm.max()
+
+    d = pd.date_range(start="2020-06-08",
+                      end=last_week_start,
+                      freq = "W-MON").to_pydatetime().tolist()
+
+
     date_ranges_hourly = [['2020-06-08', datetime.datetime(2020, 6, 8, 0, 1), datetime.datetime(2020, 6, 15, 0, 1)],
                           ['2020-06-15', datetime.datetime(2020, 6, 15, 0, 1), datetime.datetime(2020, 6, 22, 0, 1)],
                           ['latest', datetime.datetime(2020, 6, 18, 0, 1), datetime.datetime(2020, 6, 25, 0, 1)]]
 
+
     start_day_daily = datetime.datetime(2020, 6, 1, 0, 1)
     end_day_daily = datetime.datetime(2020, 6, 30, 0, 1)
 
-    for daterange in date_ranges_hourly:
+    # previous weeks
 
-        app_load_data['hourly'][daterange[0]] = {}
+    for monday in d:
 
-        app_load_data['hourly'][daterange[0]]['trend_data_hourly'], \
-            app_load_data['hourly'][daterange[0]]['top_words_hourly'] = transform_data(df,
+        week_key = 'Week starting on ' + str(monday)[:10]
+        week_start = monday
+        week_end = monday + pd.to_timedelta(7, unit='d')
+
+        app_load_data['hourly'][week_key] = {}
+
+        app_load_data['hourly'][week_key]['trend_data_hourly'], \
+            app_load_data['hourly'][week_key]['top_words_hourly'] = transform_data(df,
                                                                          trend_words,
                                                                          top_words,
-                                                                         daterange[1],
-                                                                         daterange[2],
+                                                                         week_start,
+                                                                         week_end,
                                                                          'hourly')
+
+    # last week
+
+    app_load_data['hourly']['Last 7 Days'] = {}
+
+    app_load_data['hourly']['Last 7 Days']['trend_data_hourly'], \
+        app_load_data['hourly']['Last 7 Days']['top_words_hourly'] = transform_data(df,
+                                                                     trend_words,
+                                                                     top_words,
+                                                                     last_week_start.to_pydatetime(),
+                                                                     last_week_end.to_pydatetime(),
+                                                                     'hourly')
+
+
 
     app_load_data['daily']['latest'] = {}
 

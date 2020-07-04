@@ -19,16 +19,21 @@ def root():
     with open(config['frontend_json'], 'r') as file:
         app_load_data = json.load(file)
 
-    return render_template("index.html",
+    week_keys = sorted(app_load_data['hourly'].keys(), reverse=True)
+
+    week_keys.insert(0,  week_keys.pop())
+
+    return render_template('index.html',
 
     	app_load_data = app_load_data,
     	colourlist = colourlist,
+    	week_keys = week_keys,
 
-        top_labels_hourly=list(app_load_data['hourly']['latest']['top_words_hourly']['labels']),
-        top_values_hourly=list(app_load_data['hourly']['latest']['top_words_hourly']['values']),
-        trend_time_dim_hourly=app_load_data['hourly']['latest']['trend_data_hourly']['time_dim'],
-        trend_hourly_zip=zip(app_load_data['hourly']['latest']['trend_data_hourly']['words'],
-                             app_load_data['hourly']['latest']['trend_data_hourly']['value_list'],
+        top_labels_hourly=list(app_load_data['hourly']['Last 7 Days']['top_words_hourly']['labels']),
+        top_values_hourly=list(app_load_data['hourly']['Last 7 Days']['top_words_hourly']['values']),
+        trend_time_dim_hourly=app_load_data['hourly']['Last 7 Days']['trend_data_hourly']['time_dim'],
+        trend_hourly_zip=zip(app_load_data['hourly']['Last 7 Days']['trend_data_hourly']['words'],
+                             app_load_data['hourly']['Last 7 Days']['trend_data_hourly']['value_list'],
                              colourlist),
         top_labels_daily=list(app_load_data['daily']['latest']['top_words_daily']['labels']),
         top_values_daily=list(app_load_data['daily']['latest']['top_words_daily']['values']),
