@@ -129,26 +129,29 @@ var hourlyTopChart = new Chart(ctx, {
 
 var dailyTrendsChartData = {
 
-    labels: [{% for dim in trend_time_dim_daily %} "{{dim}}", {% endfor %}],
+    labels: app_load_data['daily']['latest']['trend_data_daily']['time_dim'],
 
-    datasets: [{% for word, values, colour in trend_daily_zip %}
-          {
-            label: '{{ word }}',
-            fill: false,
-            lineTension: 0.3,
-            borderColor: "{{colour}}",
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: "{{colour}}",
-            pointHoverBorderColor: "{{colour}}",
-            pointRadius: 1,
-            pointHitRadius: 15,
-            data: {{values}},
+    datasets: []
 
-          },
-        {% endfor %}
-
-    ]
 };
+
+for (i = 0; i < 5; i++) {
+
+    dataset = {
+        label: app_load_data['daily']['latest']['trend_data_daily']['words'][i],
+        fill: false,
+        lineTension: 0.3,
+        borderColor: colourlist[i],
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: colourlist[i],
+        pointHoverBorderColor: colourlist[i],
+        pointRadius: 1,
+        pointHitRadius: 15,
+        data: app_load_data['daily']['latest']['trend_data_daily']['value_list'][i]
+    }
+
+    dailyTrendsChartData.datasets.push(dataset)
+}
 
 var ctx = document.getElementById("dailyTrendsChart").getContext("2d");
 
@@ -187,11 +190,11 @@ var dailyTrendsChart = new Chart(ctx, {
 
 var dailyTopChartData = {
 
-    labels: [{% for label in top_labels_daily %} "{{label}}", {% endfor %}],
+    labels: app_load_data['daily']['latest']['top_words_daily']['labels'],
 
     datasets: [{
         backgroundColor: "#dc3545",
-        data: [{% for val in top_values_daily %} {{val}}, {% endfor %}]
+        data: app_load_data['daily']['latest']['top_words_daily']['values']
 
     }]
 };
