@@ -22,7 +22,7 @@
             <ul class="navbar-nav">
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#hourly">Hourly</a></li>
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#daily">Daily</a></li>
-                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#sites">Sites</a></li>
+                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#examples">Examples</a></li>
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#author">Author</a></li>
             </ul>
@@ -38,9 +38,9 @@
         <section class="resume-section" id="hourly">
             <div class="resume-section-content">
                 <h2>Hourly Charts</h2>
-                <p>Frequency of words in the headlines of British news sites.</p>
+                <p>Frequency of words in the headlines of British news sites. Hourly sampling over a seven-day period.</p>
 
-                <select name="choose-week" id="choose-week" onchange=";change_week(document.getElementById('choose-week').value);">
+                <select class="form-control" name="choose-week" id="choose-week" onchange=";change_week(document.getElementById('choose-week').value);">
                     {%for key in week_keys %}
                     <option value="{{key}}">{{key}}</option>
                     {% endfor %}
@@ -65,7 +65,7 @@
         <section class="resume-section" id="daily">
             <div class="resume-section-content">
                 <h2>Daily Charts</h2>
-                <p>Frequency of words in the headlines of British news sites.</p>
+                <p>Frequency of words in the headlines of British news sites. Daily sampling over a thirty-day period.</p>
                 <div class="row">
                     <!-- Trends chart-->
                     <div class="col-sm">
@@ -81,12 +81,20 @@
         <hr class="m-0" />
 
 
-        <!-- Sites-->
-        <section class="resume-section" id="sites">
+        <!-- Examples-->
+        <section class="resume-section" id="examples">
             <div class="resume-section-content">
-                <h2>More Charts</h2>
-                <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
-                    <p>Placeholder for more charts</p>
+                <h2>Examples</h2>
+                <p>The charts below show the frequency of two words in selected periods:<br>
+                "Liverpool" became more common for a couple of days after Liverpool F.C. had won the Premier League on 26 June.<br>
+                "black" became more common when the BLM protests started in the Unites States in early June.</p>
+                <div class="row">
+                    <div class="col-sm">
+                        <img src="{{ url_for('static', filename='img/example1.png') }}" alt="" />
+                    </div>
+                    <div class="col-sm">
+                        <img src="{{ url_for('static', filename='img/example2.png') }}" alt="" />
+                    </div>
                 </div>
             </div>
         </section>
@@ -98,7 +106,7 @@
             <div class="resume-section-content">
                 <h2>About</h2>
                 <div class="resume-section-content">
-                    <p>FireDruid scrapes the front-page headlines of the 15 most popular British news sites every hour (at half past). <br>
+                    <p>FireDruid scrapes the front-page headlines of the 15 most popular British news sites once every hour (at half past). <br>
                         The charts show the frequency of words in these headlines after removing common words like "the", "she", "is", etc. </p>
                     Source code: <a href="https://github.com/BenLDN/firedruid" target="_blank">GitHub</a>
                     (<a href="https://github.com/BenLDN/firedruid/blob/master/app_structure.png" target="_blank">app structure</a>,
@@ -121,7 +129,7 @@
         <section class="resume-section" id="author">
             <div class="resume-section-content">
                 <h2>Author</h2>
-                <p>Bio placeholder</p>
+                <p>FireDruid was created by Ben Kulcsar</p>
                 <a href="https://github.com/BenLDN" target="_blank">GitHub</a> <br>
                 <a href="https://uk.linkedin.com/in/benkulcsar" target="_blank">LinkedIn</a>
             </div>
