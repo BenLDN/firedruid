@@ -45,7 +45,6 @@ def read_all():
 
 
 def trunc_df_days(df, start_day, end_day):
-    #day_delta = str(how_many_days) + "day"
     return df[(df.dtm >= start_day) & (df.dtm <= end_day)]
 
 
@@ -119,22 +118,16 @@ def get_app_load_data(trend_words, top_words, hourly_days, daily_days):
     last_week_start = df.dtm.max() - pd.to_timedelta(7, unit='d')
     last_week_end = df.dtm.max()
 
-    d = pd.date_range(start="2020-06-08",
-                      end=last_week_start,
-                      freq = "W-MON").to_pydatetime().tolist()
-
-
-    date_ranges_hourly = [['2020-06-08', datetime.datetime(2020, 6, 8, 0, 1), datetime.datetime(2020, 6, 15, 0, 1)],
-                          ['2020-06-15', datetime.datetime(2020, 6, 15, 0, 1), datetime.datetime(2020, 6, 22, 0, 1)],
-                          ['latest', datetime.datetime(2020, 6, 18, 0, 1), datetime.datetime(2020, 6, 25, 0, 1)]]
-
+    dt_ranges = pd.date_range(start="2020-06-08",
+                              end=last_week_start,
+                              freq="W-MON").to_pydatetime().tolist()
 
     start_day_daily = datetime.datetime(2020, 6, 1, 0, 1)
     end_day_daily = datetime.datetime(2020, 6, 30, 0, 1)
 
     # previous weeks
 
-    for monday in d:
+    for monday in dt_ranges:
 
         week_key = 'Week starting on ' + str(monday)[:10]
         week_start = monday
@@ -143,38 +136,36 @@ def get_app_load_data(trend_words, top_words, hourly_days, daily_days):
         app_load_data['hourly'][week_key] = {}
 
         app_load_data['hourly'][week_key]['trend_data_hourly'], \
-            app_load_data['hourly'][week_key]['top_words_hourly'] = transform_data(df,
-                                                                         trend_words,
-                                                                         top_words,
-                                                                         week_start,
-                                                                         week_end,
-                                                                         'hourly')
+            app_load_data['hourly'][week_key]['top_words_hourly'] =\
+            transform_data(df,
+                           trend_words,
+                           top_words,
+                           week_start,
+                           week_end,
+                           'hourly')
 
     # last week
 
     app_load_data['hourly']['Last 7 Days'] = {}
 
     app_load_data['hourly']['Last 7 Days']['trend_data_hourly'], \
-        app_load_data['hourly']['Last 7 Days']['top_words_hourly'] = transform_data(df,
-                                                                     trend_words,
-                                                                     top_words,
-                                                                     last_week_start.to_pydatetime(),
-                                                                     last_week_end.to_pydatetime(),
-                                                                     'hourly')
-
-
+        app_load_data['hourly']['Last 7 Days']['top_words_hourly'] =\
+        transform_data(df,
+                       trend_words,
+                       top_words,
+                       last_week_start.to_pydatetime(),
+                       last_week_end.to_pydatetime(),
+                       'hourly')
 
     app_load_data['daily']['latest'] = {}
 
     app_load_data['daily']['latest']['trend_data_daily'], \
-        app_load_data['daily']['latest']['top_words_daily'] = transform_data(df,
-                                                          trend_words,
-                                                          top_words,
-                                                          start_day_daily,
-                                                          end_day_daily,
-                                                          'daily')
+        app_load_data['daily']['latest']['top_words_daily'] =\
+        transform_data(df,
+                       trend_words,
+                       top_words,
+                       start_day_daily,
+                       end_day_daily,
+                       'daily')
 
     return app_load_data
-
-
-
