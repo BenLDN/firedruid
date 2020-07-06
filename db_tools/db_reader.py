@@ -122,8 +122,8 @@ def get_app_load_data(trend_words, top_words, hourly_days, daily_days):
                               end=last_week_start,
                               freq="W-MON").to_pydatetime().tolist()
 
-    start_day_daily = datetime.datetime(2020, 6, 1, 0, 1)
-    end_day_daily = datetime.datetime(2020, 6, 30, 0, 1)
+    end_day_daily = df.dtm.max()
+    start_day_daily = end_day_daily - pd.to_timedelta(30, unit='d')
 
     # previous weeks
 
