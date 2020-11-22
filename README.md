@@ -15,7 +15,7 @@ Updating the Site on PythonAnywhere
 * `cd ~/minerva` (minerva was the original name of FireDruid)
 * `git status` to check if only config files have been changed, then `git stash`
 * `git pull origin master`
-* Go the files pane
+* Go to the files pane
 * `config.json`: change all path parameters to absolute, e.g. /home/dir1/dir2/frontend.json
 * `app.py`, `main_scraper.py`, `db_operations.py`, `data_processor.py`: config path should be absolute
 * Go the web pane
@@ -27,6 +27,12 @@ Updating the Site on PythonAnywhere
 * Wait until the next scheduled update, then go to the tasks pane and look at the logs
 * Check server and error logs for again
 
+Running locally
+---------------
+* `python3 -m venv venv38`
+* `. ./venv38/bin/activate`
+* `pip install -r requirements.txt`
+* `python app.py`
 
 Things to Add / Improve
 -----------------------
