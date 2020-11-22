@@ -32,4 +32,11 @@ Running locally
 * `python3 -m venv venv38`
 * `. ./venv38/bin/activate`
 * `pip install -r requirements.txt`
+* `python -m textblob.download_corpora`
 * `python app.py`
+
+Testing
+-------
+* Run `python app.py` and check if the app is running (default: 0.0.0.0:5000)
+* Run `python db_admin.py processed-to-csv` and check if the csv file contains updated data (`tail db_processed.csv`)
+* Inspect `frontend.json` to see  if it's updated
