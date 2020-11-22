@@ -36,16 +36,24 @@ def scrape_all_sites(news_sites_file):
 
 def process_scraped_data(scrape_keys, words_stored):
 
-    for scrape_key in scrape_keys:
+    processed_batch = []
+    result_list = db_reader.read_site_titles(scrape_keys)
 
-        raw_title_list, scrape = db_reader.read_site_titles(scrape_key)
-        site, day, hour = scrape[1], scrape[2], scrape[3]
+    for result in result_list:
 
-        words_tuple_list = data_processor\
-            .words_tuple_list_from_titles(raw_title_list,
-                                          words_stored)
+        scrape, raw_title_list = result
+        scrape_key, site, day, hour = scrape
 
-        db_writer.store_words(words_tuple_list, scrape_key, site, day, hour)
+        #print(raw_title_list)
+        #print()
+        if len(raw_title_list) > 1:
+            words_tuple_list = data_processor\
+                .words_tuple_list_from_titles(raw_title_list,
+                                              words_stored)
+
+            processed_batch.append(tuple([words_tuple_list, scrape_key, site, day, hour]))
+
+    db_writer.store_words(processed_batch)
 
 
 def generate_frontend_json(config):

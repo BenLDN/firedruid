@@ -4,23 +4,55 @@ import pandas as pd
 import db_tools.db_operations as db_operations
 
 
-def read_site_titles(scrape_key):
+def read_site_titles(scrape_key_list):
 
     conn = db_operations.db_connect('raw')
 
-    sql_titles = 'SELECT * FROM titles WHERE fk_scrapes = ' + str(scrape_key)
-    sql_scrape = 'SELECT * FROM scrapes WHERE pk_scrapes = ' + str(scrape_key)
+    result_list = []
 
-    raw_titles = db_operations.execute_sql(conn, sql_titles)
-    scrape = db_operations.execute_sql(conn, sql_scrape)
+    sql = '''SELECT s.pk_scrapes, s.site, s.day, s.hour, t.title
+             FROM scrapes s LEFT JOIN titles t ON s.pk_scrapes = t.fk_scrapes
+             WHERE s.pk_scrapes IN
+          '''
+    sql +=  '(' + ','.join([str(itm) for itm in scrape_key_list]) + ')'
 
-    site_titles = [title_item[2]
-                   for title_item in raw_titles
-                   if title_item[1] == scrape_key]
+    results = db_operations.execute_sql(conn, sql)
 
     db_operations.db_close(conn)
 
-    return site_titles, scrape[0]
+    result_dict = {}
+    for result in results:
+        key = tuple(result[0:4])
+        value = result[4]
+        if key in result_dict:
+            result_dict[key].append(value)
+        else:
+            result_dict[key] = [value]
+
+    result_list = [(k,v) for k,v in result_dict.items()]
+
+    # results_list = []
+    #
+    # for scrape_key in scrape_key_list:
+    #
+    #     sql_titles = 'SELECT * FROM titles WHERE fk_scrapes = ' + str(scrape_key)
+    #     sql_scrape = 'SELECT * FROM scrapes WHERE pk_scrapes = ' + str(scrape_key)
+    #
+    #     raw_titles = db_operations.execute_sql(conn, sql_titles)
+    #     scrape = db_operations.execute_sql(conn, sql_scrape)
+    #
+    #     site_titles = [title_item[2]
+    #                    for title_item in raw_titles
+    #                    if title_item[1] == scrape_key]
+    #
+    #     print(tuple([scrape[0], site_titles]))
+    #     a = input('---')
+    #
+    #     result_list.append(tuple([scrape[0], site_titles]))
+    #
+    # db_operations.db_close(conn)
+
+    return result_list
 
 
 def read_all():

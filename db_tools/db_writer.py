@@ -13,13 +13,7 @@ def store_scraped_titles(site_name, day, hour, title_list):
     return scrape_key
 
 
-def store_words(words_tuple_list, scrape_key, site, day, hour):
-
+def store_words(processed_batch):
     conn = db_operations.db_connect('processed')
-    db_operations.insert_words(conn,
-                               words_tuple_list,
-                               scrape_key,
-                               site,
-                               day,
-                               hour)
+    db_operations.insert_words(conn, processed_batch)
     db_operations.db_close(conn)

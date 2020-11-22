@@ -78,21 +78,23 @@ def insert_titles(conn, title_list, scrape_key):
     c.close()
 
 
-def insert_words(conn, words_tup_list, scrape_key, site, day, hour):
+def insert_words(conn, processed_batch): # words_tup_list, scrape_key, site, day, hour
+
+    insert_rows = []
+
+    for processed_row in processed_batch:
+        words_tup_list, scrape_key, site, day, hour = processed_row
+        for words_tup in words_tup_list:
+            insert_rows.append((None,
+                                scrape_key,
+                                site,
+                                day,
+                                hour,
+                                words_tup[0],
+                                words_tup[1],
+                                words_tup[2]))
     c = conn.cursor()
-    rows = []
-    for words_tup in words_tup_list:
-        rows.append((None,
-                     scrape_key,
-                     site,
-                     day,
-                     hour,
-                     words_tup[0],
-                     words_tup[1],
-                     words_tup[2]))
-
-    c.executemany('INSERT INTO words VALUES (?, ?, ?, ?, ?, ?, ?, ?)', rows)
-
+    c.executemany('INSERT INTO words VALUES (?, ?, ?, ?, ?, ?, ?, ?)', insert_rows)
     conn.commit()
     c.close()
 
