@@ -33,14 +33,3 @@ Running locally
 * `. ./venv38/bin/activate`
 * `pip install -r requirements.txt`
 * `python app.py`
-
-Things to Add / Improve
------------------------
-* db_reader.py: rename and split functions, optimise reading from the database
-* firecharts.js: code cleanup
-* choose from multiple periods in monthly view
-* change the name of styles (remove references to the original resume template)
-* show more than five words in the line charts
-* "good" and "bad" word trends
-* selected word trends in a grid
-* upgrade to Python 3.8
