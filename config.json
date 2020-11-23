@@ -1,6 +1,6 @@
 {
   "processed_db_path": "./processed_data.db",
-  "excluded_words_file": "./exclude_words.json",
+  "excluded_words_file": "./excluded_words.json",
   "words_stored": 30,
   "news_sites_file": "./news_sites.json",
   "raw_db_path": "./raw_data.db",
