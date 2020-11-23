@@ -1,17 +1,25 @@
 [
   {
+    "name": "bbc",
+    "link": "https://www.bbc.co.uk",
     "rules": [
       [
-        0,
+        "span",
         {
-          "class": "top-story__title"
+          "aria-hidden": "true"
+        }
+      ],
+      [
+        "span",
+        {
+          "aria-hidden": "false"
         }
       ]
-    ],
-    "link": "https://www.bbc.co.uk",
-    "name": "bbc"
+    ]
   },
   {
+    "name": "guardian",
+    "link": "https://www.theguardian.com/uk",
     "rules": [
       [
         "a",
@@ -19,11 +27,11 @@
           "data-link-name": "article"
         }
       ]
-    ],
-    "link": "https://www.theguardian.com/uk",
-    "name": "guardian"
+    ]
   },
   {
+    "name": "independent",
+    "link": "https://www.independent.co.uk",
     "rules": [
       [
         0,
@@ -35,11 +43,11 @@
         "h2",
         0
       ]
-    ],
-    "link": "https://www.independent.co.uk",
-    "name": "independent"
+    ]
   },
   {
+    "name": "telegraph",
+    "link": "https://www.telegraph.co.uk",
     "rules": [
       [
         0,
@@ -47,11 +55,11 @@
           "class": "list-headline__text"
         }
       ]
-    ],
-    "link": "https://www.telegraph.co.uk",
-    "name": "telegraph"
+    ]
   },
   {
+    "name": "dailymail",
+    "link": "https://www.dailymail.co.uk",
     "rules": [
       [
         "a",
@@ -59,11 +67,11 @@
           "itemprop": "url"
         }
       ]
-    ],
-    "link": "https://www.dailymail.co.uk",
-    "name": "dailymail"
+    ]
   },
   {
+    "name": "sun",
+    "link": "https://www.thesun.co.uk",
     "rules": [
       [
         "p",
@@ -71,11 +79,11 @@
           "class": "teaser__subdeck"
         }
       ]
-    ],
-    "link": "https://www.thesun.co.uk",
-    "name": "sun"
+    ]
   },
   {
+    "name": "mirror",
+    "link": "https://www.mirror.co.uk",
     "rules": [
       [
         "a",
@@ -83,11 +91,11 @@
           "class": "headline"
         }
       ]
-    ],
-    "link": "https://www.mirror.co.uk",
-    "name": "mirror"
+    ]
   },
   {
+    "name": "express",
+    "link": "https://www.express.co.uk",
     "rules": [
       [
         "h2",
@@ -97,11 +105,11 @@
         "h4",
         0
       ]
-    ],
-    "link": "https://www.express.co.uk",
-    "name": "express"
+    ]
   },
   {
+    "link": "https://www.standard.co.uk/",
+    "name": "standard",
     "rules": [
       [
         "div",
@@ -113,11 +121,11 @@
         "h2",
         0
       ]
-    ],
-    "link": "https://www.standard.co.uk/",
-    "name": "standard"
+    ]
   },
   {
+    "link": "https://www.dailystar.co.uk/",
+    "name": "star",
     "rules": [
       [
         "a",
@@ -125,41 +133,41 @@
           "class": "headline"
         }
       ]
-    ],
-    "link": "https://www.dailystar.co.uk/",
-    "name": "star"
+    ]
   },
   {
-    "rules": [
-      [
-        "h3",
-        0
-      ]
-    ],
     "link": "https://metro.co.uk/",
-    "name": "metro"
-  },
-  {
+    "name": "metro",
     "rules": [
       [
         "h3",
         0
       ]
-    ],
+    ]
+  },
+  {
     "link": "https://www.thetimes.co.uk/",
-    "name": "times"
-  },
-  {
+    "name": "times",
     "rules": [
       [
         "h3",
         0
       ]
-    ],
-    "link": "https://www.theweek.co.uk/",
-    "name": "week"
+    ]
   },
   {
+    "link": "https://www.theweek.co.uk/",
+    "name": "week",
+    "rules": [
+      [
+        "h3",
+        0
+      ]
+    ]
+  },
+  {
+    "link": "https://www.ft.com/",
+    "name": "ft",
     "rules": [
       [
         "a",
@@ -167,18 +175,16 @@
           "class": "js-teaser-heading-link"
         }
       ]
-    ],
-    "link": "https://www.ft.com/",
-    "name": "ft"
+    ]
   },
   {
+    "link": "https://inews.co.uk/",
+    "name": "inews",
     "rules": [
       [
         "h2",
         0
       ]
-    ],
-    "link": "https://inews.co.uk/",
-    "name": "inews"
+    ]
   }
 ]

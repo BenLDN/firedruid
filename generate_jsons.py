@@ -4,7 +4,8 @@ news_sites = [
     {
         'name': 'bbc',
         'link': 'https://www.bbc.co.uk',
-        'rules': [[0, {'class': 'top-story__title'}]]
+        'rules': [['span', {'aria-hidden': 'true'}],
+                  ['span', {'aria-hidden': 'false'}]]
     },
 
     {
@@ -114,7 +115,9 @@ excluded_words = ['the', 'be', 'is', 'am', 'are', 'was',
                   'gives', 'gave', 'given' 'day', 'most', 'us', 'says',
                   'why', 'off', 'more', 'show', 'ever', 'need', 'should',
                   'taking', 'got', 'everything', 'every', 'best', 'news',
-                  '2020', '2021', 'week', 'star', 'day', 'life']
+                  '2020', '2021', 'week', 'star', 'day', 'life',
+                  'man', 'woman', '000'
+                  ]
 
 
 with open('news_sites.json', 'w') as news_file:
