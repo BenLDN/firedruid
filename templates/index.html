@@ -21,6 +21,7 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#chart">Interactive Charts</a></li>
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#hourly">Hourly</a></li>
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#daily">Daily</a></li>
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#examples">Examples</a></li>
@@ -34,6 +35,48 @@
     <!-- Page Content-->
     <div class="container-fluid p-0">
 
+      <!-- Interactive Charts-->
+      <section class="resume-section" id="chart">
+          <div class="resume-section-content">
+              <h2>Interactive Charts</h2>
+              <p>Test</p>
+              <select class="form-control" name="choose-start" id="choose-start" onchange=";update_everything(document.getElementById('choose-start').value,
+                                                                                                              document.getElementById('choose-end').value,
+                                                                                                              document.getElementById('choose-top-n').value);">
+                  {%for dt in dates %}
+                  <option value="{{dt}}">{{dt}}</option>
+                  {% endfor %}
+              </select>
+
+              <select class="form-control" name="choose-end" id="choose-end" onchange=";update_everything(document.getElementById('choose-start').value,
+                                                                                                              document.getElementById('choose-end').value,
+                                                                                                              document.getElementById('choose-top-n').value);">
+                  {%for dt in dates %}
+                  <option value="{{dt}}">{{dt}}</option>
+                  {% endfor %}
+              </select>
+
+              <select class="form-control" name="choose-top-n" id="choose-top-n" onchange=";update_everything(document.getElementById('choose-start').value,
+                                                                                                              document.getElementById('choose-end').value,
+                                                                                                              document.getElementById('choose-top-n').value);">
+                  {%for i in range(3, 11) %}
+                  <option value="{{i}}">{{i}}</option>
+                  {% endfor %}
+              </select>
+
+              <div class="row">
+                  <!-- Trends chart-->
+                  <div class="col-sm">
+                      <canvas id="interactiveLineChart" width="500px" height="500px"></canvas>
+                  </div>
+                  <!-- Bar chart-->
+                  <div class="col-sm">
+                      <canvas id="interactiveBarChart" width="500px" height="500px"></canvas>
+                  </div>
+              </div>
+          </div>
+      </section>
+      <hr class="m-0" />
 
         <!-- Hourly-->
         <section class="resume-section" id="hourly">

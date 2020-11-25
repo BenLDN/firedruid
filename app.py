@@ -17,14 +17,23 @@ def root():
     with open(config['frontend_json'], 'r') as file:
         app_load_data = json.load(file)
 
+    with open(config['frontend_data_json'], 'r') as file:
+        all_data = json.load(file)
+
+    datetimes = all_data['datetimes']
+    dates = sorted(list(set([dtm[:10] for dtm in datetimes])))
+    print(dates)
+
     week_keys = sorted(app_load_data['hourly'].keys(), reverse=True)
 
     week_keys.insert(0,  week_keys.pop())
 
     return render_template('index.html',
                            app_load_data=app_load_data,
+                           all_data=all_data,
                            colourlist=colourlist,
-                           week_keys=week_keys)
+                           week_keys=week_keys,
+                           dates = dates)
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")

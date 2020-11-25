@@ -44,8 +44,6 @@ def process_scraped_data(scrape_keys, words_stored):
         scrape, raw_title_list = result
         scrape_key, site, day, hour = scrape
 
-        #print(raw_title_list)
-        #print()
         if len(raw_title_list) > 1:
             words_tuple_list = data_processor\
                 .words_tuple_list_from_titles(raw_title_list,

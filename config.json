@@ -6,6 +6,7 @@
   "raw_db_path": "./raw_data.db",
   "min_word_length": 3,
   "frontend_json": "./frontend.json",
+  "frontend_data_json": "./frontend_data.json",
 
   "number_of_words_line" : 5,
   "number_of_words_bar" : 20,
