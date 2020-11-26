@@ -2,15 +2,39 @@
 var app_load_data = {{app_load_data}}
 var all_data = {{all_data}}
 var colourlist = {{colourlist}}
-var start_dtm = '2020-06-30 01'
-var end_dtm = '2020-07-15 20'
+var start_dt = "{{default_start_date}}"
+var end_dt = "{{default_end_date}}"
 var top_n = 5
 
-function generate_data(start_dtm, end_dtm, top_n) {
 
 
+function generate_data(start_dt, end_dt, top_n) {
+  var i
+  var j
+  var k
+
+  // adding hour to dates
+
+  for (i = 0; i < all_data['datetimes'].length; i++) {
+    if (all_data['datetimes'][i].slice(0,10) == start_dt) {
+      start_dtm = all_data['datetimes'][i]
+      break
+    }
+  }
+
+  for (i = all_data['datetimes'].length - 1; i >= 0; i--) {
+    if (all_data['datetimes'][i].slice(0,10) == end_dt) {
+      end_dtm = all_data['datetimes'][i]
+      break
+    }
+  }
   console.log('Updating, logging start_dtm, end_dtm, top_n')
   console.log(start_dtm, end_dtm, top_n)
+
+  // start_dtm = start_dt.concat(" 01")
+  // end_dtm = end_dt.concat(" 15")
+
+
   // get start and end index based on test datetimes
   start_index = all_data['datetimes'].indexOf(start_dtm)
   end_index = all_data['datetimes'].indexOf(end_dtm)
@@ -28,10 +52,9 @@ function generate_data(start_dtm, end_dtm, top_n) {
   // determine threshold and create mask
   total_freqs_over_period_sorted = filtered_freq_lists.reduce(sum)
   total_freqs_over_period_sorted = total_freqs_over_period_sorted.sort(function(a, b) {return a - b;});
-  threshold = total_freqs_over_period_sorted[total_freqs_over_period_sorted.length - 10]
+  threshold = total_freqs_over_period_sorted[total_freqs_over_period_sorted.length - top_n]
 
   var mask = []
-  var i
   for (i = 0; i < total_freqs_over_period.length; i++) {
     if (total_freqs_over_period[i] >= threshold) {
       mask.push(true)
@@ -51,8 +74,6 @@ function generate_data(start_dtm, end_dtm, top_n) {
 
   // top10 frequency arrays
   top_frequencies = []
-  var j
-  var k
 
   for (i = 0; i < filtered_freq_lists.length; i++) {
     var k = 0
@@ -96,10 +117,88 @@ function generate_data(start_dtm, end_dtm, top_n) {
   sortedArrayOfObj.forEach(function(d){
     top_words_sorted.push(d.label);
     top_total_freqs_over_period_sorted.push(d.data);
-  });
+  })
+
+
+    // create date arrays for the dropdowns
+
+    function onlyUnique(value, index, self) {
+      return self.indexOf(value) === index;
+    }
+
+    all_dates = all_data['datetimes'].map((dtm) => dtm.slice(0,10)).filter(onlyUnique)
+
+    valid_dt_starts = all_dates.slice(0, all_dates.indexOf(end_dt))
+    valid_dt_ends = all_dates.slice(all_dates.indexOf(start_dt) + 1, all_dates.length)
+
+    // update options in select dropdown
+
+    function removeOptions(selectElement) {
+      var i, L = selectElement.options.length - 1;
+      for(i = L; i >= 0; i--) {
+      selectElement.remove(i);
+      }
+    }
+
+    function selectElement(id, valueToSelect) {
+      let element = document.getElementById(id);
+      element.value = valueToSelect;
+    }
+
+    start_selector = document.getElementById("choose-start")
+    end_selector = document.getElementById("choose-end")
+
+    removeOptions(start_selector)
+    removeOptions(end_selector)
+
+    for (var i = 0; i < valid_dt_starts.length; i++) {
+    var opt = valid_dt_starts[i];
+    var el = document.createElement("option");
+    el.textContent = opt;
+    el.value = opt;
+    start_selector.appendChild(el);
+    }
+
+    for (var i = 0; i < valid_dt_ends.length; i++) {
+    var opt = valid_dt_ends[i];
+    var el = document.createElement("option");
+    el.textContent = opt;
+    el.value = opt;
+    end_selector.appendChild(el);
+    }
+
+    // selectElement("choose-start", start_dt)
+    // selectElement("choose-end", end_dt)
+
+    start_selector.value = start_dt
+    end_selector.value = end_dt
+
 }
 
-generate_data(start_dtm, end_dtm, top_n)
+generate_data(start_dt, end_dt, top_n)
+
+// var slider = document.getElementById('slider');
+//
+// noUiSlider.create(slider, {
+//     start: [start_index, end_index],
+//     connect: true,
+//     margin: 72,
+//     range: {
+//         'min': 0,
+//         'max': all_data['datetimes'].length
+//     }
+// })
+//
+// slider.noUiSlider.on('change', function (values, handle) {
+//
+//   start_index = parseInt(values[0])
+//   end_index = parseInt(values[1])
+//   start_dt = all_data['datetimes'][start_index]
+//   end_dt = all_data['datetimes'][end_index]
+//   console.log(start_dt)
+//   console.log(end_dt)
+//   //start_index = parseInt
+// })
 
 //==
 
@@ -506,9 +605,8 @@ function change_week(wk) {
 // CHANGE PARAMETERS
 
 function update_everything(start_selected, end_selected, top_seleced) {
-  start_with_hour = start_selected.concat(" 01")
-  end_with_hour = end_selected.concat(" 23")
-  generate_data(start_with_hour, end_with_hour, parseInt(top_seleced))
+
+  generate_data(start_selected, end_selected, parseInt(top_seleced))
   //
   interactiveBarChart.data.labels = top_words_sorted
   interactiveBarChart.data.datasets[0].data = top_total_freqs_over_period_sorted

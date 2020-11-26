@@ -10,6 +10,8 @@
     <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/nouislider.css') }}" rel="stylesheet" />
+
 </head>
 
 <body id="page-top">
@@ -39,28 +41,29 @@
       <section class="resume-section" id="chart">
           <div class="resume-section-content">
               <h2>Interactive Charts</h2>
-              <p>Test</p>
-              <select class="form-control" name="choose-start" id="choose-start" onchange=";update_everything(document.getElementById('choose-start').value,
-                                                                                                              document.getElementById('choose-end').value,
-                                                                                                              document.getElementById('choose-top-n').value);">
+              <!-- Range: <div id="start-dt"></div> <div id="end-dt"></div>
+              <div id="slider"></div> -->
+              From: <select style="width: 150px;" class="form-control" name="choose-start" id="choose-start" onchange=";update_everything(document.getElementById('choose-start').value,
+                                                                                                                                          document.getElementById('choose-end').value,
+                                                                                                                                          document.getElementById('choose-top-n').value);">
+                  <!--{%for dt in dates %}
+                  <option value="{{dt}}" {% if dt == default_start_date %}{{ "selected" }}{% endif %}>{{dt}}</option>
+                  {% endfor %}-->
+              </select>
+
+              To:<select style="width: 150px;" class="form-control" name="choose-end" id="choose-end" onchange=";update_everything(document.getElementById('choose-start').value,
+                                                                                                                                   document.getElementById('choose-end').value,
+                                                                                                                                   document.getElementById('choose-top-n').value);">
                   {%for dt in dates %}
-                  <option value="{{dt}}">{{dt}}</option>
+                  <option value="{{dt}}" {% if dt == default_end_date %}{{ "selected" }}{% endif %}>{{dt}}</option>
                   {% endfor %}
               </select>
 
-              <select class="form-control" name="choose-end" id="choose-end" onchange=";update_everything(document.getElementById('choose-start').value,
-                                                                                                              document.getElementById('choose-end').value,
-                                                                                                              document.getElementById('choose-top-n').value);">
-                  {%for dt in dates %}
-                  <option value="{{dt}}">{{dt}}</option>
-                  {% endfor %}
-              </select>
-
-              <select class="form-control" name="choose-top-n" id="choose-top-n" onchange=";update_everything(document.getElementById('choose-start').value,
-                                                                                                              document.getElementById('choose-end').value,
-                                                                                                              document.getElementById('choose-top-n').value);">
+              Words to show:<select style="width: 50px;" class="form-control" name="choose-top-n" id="choose-top-n" onchange=";update_everything(document.getElementById('choose-start').value,
+                                                                                                                            document.getElementById('choose-end').value,
+                                                                                                                            document.getElementById('choose-top-n').value);">
                   {%for i in range(3, 11) %}
-                  <option value="{{i}}">{{i}}</option>
+                  <option value="{{i}}" {% if i == default_top_n %}{{ "selected" }}{% endif %}>{{i}}</option>
                   {% endfor %}
               </select>
 
@@ -70,7 +73,7 @@
                       <canvas id="interactiveLineChart" width="500px" height="500px"></canvas>
                   </div>
                   <!-- Bar chart-->
-                  <div class="col-sm">
+                  <div class="col-sm-4">
                       <canvas id="interactiveBarChart" width="500px" height="500px"></canvas>
                   </div>
               </div>
@@ -188,6 +191,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
     <!-- Core theme JS-->
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    <!-- NoUISlider-->
+    <script src="{{ url_for('static', filename='js/nouislider.js') }}"></script>
     <!-- Charts JS-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     <script type="text/javascript"> {% include "firecharts.js" %} </script>
