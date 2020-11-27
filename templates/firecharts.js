@@ -26,8 +26,6 @@ function generate_data(start_dt, end_dt, top_n) {
       break
     }
   }
-  console.log('Updating, logging start_dtm, end_dtm, top_n')
-  console.log(start_dtm, end_dtm, top_n)
 
   // start_dtm = start_dt.concat(" 01")
   // end_dtm = end_dt.concat(" 15")
@@ -306,7 +304,6 @@ var interactiveBarChart = new Chart(ctx, {
 function update_everything(start_selected, end_selected, top_seleced) {
 
   generate_data(start_selected, end_selected, parseInt(top_seleced))
-  console.log(top_seleced)
   //
   interactiveBarChart.data.labels = top_words_sorted
   interactiveBarChart.data.datasets[0].data = top_total_freqs_over_period_sorted

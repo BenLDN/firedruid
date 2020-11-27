@@ -14,33 +14,19 @@ def root():
     with open('config.json', 'r') as file:
         config = json.load(file)
 
-    with open(config['frontend_json'], 'r') as file:
-        app_load_data = json.load(file)
-
     with open(config['frontend_data_json'], 'r') as file:
         all_data = json.load(file)
 
     datetimes = all_data['datetimes']
     dates = sorted(list(set([dtm[:10] for dtm in datetimes])))
-    dates = dates[14:] # dropping the days when firedruid was running in test mode
     default_end_date = dates[-1]
     default_start_date = dates[-31]
-    default_top_n = 5
-    print(datetimes[-1])
-
-    week_keys = sorted(app_load_data['hourly'].keys(), reverse=True)
-
-    week_keys.insert(0,  week_keys.pop())
 
     return render_template('index.html',
-                           app_load_data=app_load_data,
                            all_data=all_data,
                            colourlist=colourlist,
-                           week_keys=week_keys,
-                           dates=dates,
                            default_start_date=default_start_date,
-                           default_end_date=default_end_date,
-                           default_top_n=default_top_n)
+                           default_end_date=default_end_date)
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
