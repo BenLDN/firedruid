@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
-    <link href="{{ url_for('static', filename='css/nouislider.css') }}" rel="stylesheet" />
 
 </head>
 
@@ -24,8 +23,6 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav">
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#chart">Interactive Charts</a></li>
-                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#hourly">Hourly</a></li>
-                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#daily">Daily</a></li>
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#examples">Examples</a></li>
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#author">Author</a></li>
@@ -41,31 +38,30 @@
       <section class="resume-section" id="chart">
           <div class="resume-section-content">
               <h2>Interactive Charts</h2>
-              <!-- Range: <div id="start-dt"></div> <div id="end-dt"></div>
-              <div id="slider"></div> -->
-              From: <select style="width: 150px;" class="form-control" name="choose-start" id="choose-start" onchange=";update_everything(document.getElementById('choose-start').value,
+              <p>Text text text text text text text text text text text text text text</p>
+              <div class="row">
+              <label for="choose-start">&nbsp;&nbsp;Period start date:&nbsp;</label>
+              <select style="width: 150px;" class="form-control" name="choose-start" id="choose-start" onchange=";update_everything(document.getElementById('choose-start').value,
                                                                                                                                           document.getElementById('choose-end').value,
                                                                                                                                           document.getElementById('choose-top-n').value);">
-                  <!--{%for dt in dates %}
-                  <option value="{{dt}}" {% if dt == default_start_date %}{{ "selected" }}{% endif %}>{{dt}}</option>
-                  {% endfor %}-->
               </select>
 
-              To:<select style="width: 150px;" class="form-control" name="choose-end" id="choose-end" onchange=";update_everything(document.getElementById('choose-start').value,
+              <label for="choose-end">&nbsp;&nbsp;Period end date:&nbsp;</label>
+              <select style="width: 150px;" class="form-control" name="choose-end" id="choose-end" onchange=";update_everything(document.getElementById('choose-start').value,
                                                                                                                                    document.getElementById('choose-end').value,
                                                                                                                                    document.getElementById('choose-top-n').value);">
-                  {%for dt in dates %}
-                  <option value="{{dt}}" {% if dt == default_end_date %}{{ "selected" }}{% endif %}>{{dt}}</option>
-                  {% endfor %}
               </select>
 
-              Words to show:<select style="width: 50px;" class="form-control" name="choose-top-n" id="choose-top-n" onchange=";update_everything(document.getElementById('choose-start').value,
+              <label for="choose-top-n">&nbsp;&nbsp;Number of words to show:&nbsp;</label>
+              <select style="width: 50px;" class="form-control" name="choose-top-n" id="choose-top-n" onchange=";update_everything(document.getElementById('choose-start').value,
                                                                                                                             document.getElementById('choose-end').value,
                                                                                                                             document.getElementById('choose-top-n').value);">
-                  {%for i in range(3, 11) %}
-                  <option value="{{i}}" {% if i == default_top_n %}{{ "selected" }}{% endif %}>{{i}}</option>
-                  {% endfor %}
+              {%for i in range(3, 11) %}
+              <option value="{{i}}" {% if i == default_top_n %}{{ "selected" }}{% endif %}>{{i}}</option>
+              {% endfor %}
               </select>
+
+              <br><br>
 
               <div class="row">
                   <!-- Trends chart-->
@@ -80,53 +76,6 @@
           </div>
       </section>
       <hr class="m-0" />
-
-        <!-- Hourly-->
-        <section class="resume-section" id="hourly">
-            <div class="resume-section-content">
-                <h2>Hourly Charts</h2>
-                <p>Frequency of words in the headlines of British news sites. Hourly sampling over a seven-day period.</p>
-
-                <select class="form-control" name="choose-week" id="choose-week" onchange=";change_week(document.getElementById('choose-week').value);">
-                    {%for key in week_keys %}
-                    <option value="{{key}}">{{key}}</option>
-                    {% endfor %}
-                </select>
-
-                <div class="row">
-                    <!-- Trends chart-->
-                    <div class="col-sm">
-                        <canvas id="hourlyTrendsChart" width="500px" height="500px"></canvas>
-                    </div>
-                    <!-- Bar chart-->
-                    <div class="col-sm">
-                        <canvas id="hourlyTopChart" width="500px" height="500px"></canvas>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <hr class="m-0" />
-
-
-        <!-- Daily-->
-        <section class="resume-section" id="daily">
-            <div class="resume-section-content">
-                <h2>Daily Charts</h2>
-                <p>Frequency of words in the headlines of British news sites. Daily sampling over a thirty-day period.</p>
-                <div class="row">
-                    <!-- Trends chart-->
-                    <div class="col-sm">
-                        <canvas id="dailyTrendsChart" width="500px" height="500px"></canvas>
-                    </div>
-                    <!-- Bar chart-->
-                    <div class="col-sm">
-                        <canvas id="dailyTopChart" width="500px" height="500px"></canvas>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <hr class="m-0" />
-
 
         <!-- Examples-->
         <section class="resume-section" id="examples">
@@ -191,8 +140,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
     <!-- Core theme JS-->
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
-    <!-- NoUISlider-->
-    <script src="{{ url_for('static', filename='js/nouislider.js') }}"></script>
     <!-- Charts JS-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     <script type="text/javascript"> {% include "firecharts.js" %} </script>
