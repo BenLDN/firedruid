@@ -54,6 +54,8 @@ def read_all():
 
     return df
 
+#######################################
+
 
 def trunc_df_days(df, start_day, end_day):
     return df[(df.dtm >= start_day) & (df.dtm <= end_day)]
@@ -180,3 +182,44 @@ def get_app_load_data(trend_words, top_words, hourly_days, daily_days):
                        'daily')
 
     return app_load_data
+
+    ###################
+
+def get_frontend_data(words_stored):
+
+    df = read_all()
+
+    df['dtm'] = df['dt'] + " " + df['tm'].str[:2]
+    df = df[['dt', 'dtm', 'word', 'freq']]
+    df['rel_freq'] = df['freq'] / df.groupby('dtm')['dtm'].transform('count') * words_stored
+
+    pivot_dt = pd.pivot_table(df,
+                      values='rel_freq',
+                      index=['word'],
+                      columns=['dt'],
+                      aggfunc=np.sum)
+
+    words_to_keep = set()
+    lens = []
+    for column in pivot_dt:
+        daily_top_words = list(pivot_dt[column].sort_values(ascending=False)[:10].index.values)
+        words_to_keep.update(daily_top_words)
+
+    pivot_dtm = pd.pivot_table(df,
+                       values='rel_freq',
+                       index=['word'],
+                       columns=['dtm'],
+                       aggfunc=np.sum)
+
+    pivot_dtm = pivot_dtm[pivot_dtm.index.isin(words_to_keep)]
+    pivot_dtm = pivot_dtm.transpose()
+    pivot_dtm = pivot_dtm.fillna(value=0)
+    pivot_dtm = pivot_dtm.applymap(lambda x: int(str(x)[2:6]))
+    pivot_dtm = pivot_dtm.sort_index(ascending=True)
+
+    frontend_dict = {}
+    frontend_dict['words'] = list(pivot_dtm.columns)
+    frontend_dict['datetimes'] = list(pivot_dtm.index)
+    frontend_dict['frequencies'] = pivot_dtm.values.tolist()
+
+    return frontend_dict

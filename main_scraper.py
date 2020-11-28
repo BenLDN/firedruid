@@ -65,6 +65,10 @@ def generate_frontend_json(config):
     with open(config['frontend_json'], 'w') as file:
         json.dump(app_load_data, file, indent=2)
 
+    frontend_data = db_reader.get_frontend_data(config['words_stored'])
+
+    with open(config['frontend_data_json'], 'w') as file:
+        json.dump(frontend_data, file)
 
 if __name__ == '__main__':
 
