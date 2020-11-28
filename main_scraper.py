@@ -56,19 +56,11 @@ def process_scraped_data(scrape_keys, words_stored):
 
 def generate_frontend_json(config):
 
-    app_load_data = \
-        db_reader.get_app_load_data(config['number_of_words_line'],
-                                    config['number_of_words_bar'],
-                                    config['number_of_days_hourly'],
-                                    config['number_of_days_daily'])
-
-    with open(config['frontend_json'], 'w') as file:
-        json.dump(app_load_data, file, indent=2)
-
     frontend_data = db_reader.get_frontend_data(config['words_stored'])
 
     with open(config['frontend_data_json'], 'w') as file:
         json.dump(frontend_data, file)
+
 
 if __name__ == '__main__':
 
