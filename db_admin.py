@@ -51,7 +51,8 @@ def db_to_csv(db_name):
 
 def rerun_processing():
 
-    text = '''Top X words from each scrape are stored. What should X be? (recommended=30) '''
+    text = '''Top X words from each scrape are stored.
+              What should X be? (recommended=30) '''
     words_stored = int(input(text))
 
     conn = db_operations.db_connect('processed')
@@ -73,7 +74,7 @@ def rerun_processing():
 
     for i in range(0, no_of_chunks + 1):
         print('Starting chunk ' + str(i) + '...')
-        chunk = scrape_keys[i*chunk_size : min((i+1)*chunk_size, no_of_keys)]
+        chunk = scrape_keys[i*chunk_size:min((i+1)*chunk_size, no_of_keys)]
         main_scraper.process_scraped_data(chunk, words_stored)
 
     print("Done")

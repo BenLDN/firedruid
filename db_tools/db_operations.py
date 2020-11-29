@@ -90,12 +90,12 @@ def insert_words(conn, processed_batch):
                                 site,
                                 day,
                                 hour,
-                                words_tup[0], # the word itself
-                                words_tup[1], # frequency
-                                words_tup[2])) # rank
+                                words_tup[0],  # the word itself
+                                words_tup[1],  # frequency
+                                words_tup[2]))  # rank
     c = conn.cursor()
     c.executemany('INSERT INTO words VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-                   insert_rows)
+                  insert_rows)
     conn.commit()
     c.close()
 

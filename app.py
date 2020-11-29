@@ -32,5 +32,6 @@ def root():
                            default_end_date=default_end_date,
                            excluded_words=excluded_words)
 
+
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")

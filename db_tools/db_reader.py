@@ -1,4 +1,3 @@
-import datetime
 import numpy as np
 import pandas as pd
 import db_tools.db_operations as db_operations
@@ -14,7 +13,7 @@ def read_site_titles(scrape_key_list):
              FROM scrapes s LEFT JOIN titles t ON s.pk_scrapes = t.fk_scrapes
              WHERE s.pk_scrapes IN
           '''
-    sql +=  '(' + ','.join([str(itm) for itm in scrape_key_list]) + ')'
+    sql += '(' + ','.join([str(itm) for itm in scrape_key_list]) + ')'
 
     results = db_operations.execute_sql(conn, sql)
 
@@ -29,7 +28,7 @@ def read_site_titles(scrape_key_list):
         else:
             result_dict[key] = [value]
 
-    result_list = [(k,v) for k,v in result_dict.items()]
+    result_list = [(k, v) for k, v in result_dict.items()]
 
     return result_list
 
@@ -71,28 +70,27 @@ def get_frontend_data(words_stored):
         / df.groupby('dtm')['dtm'].transform('count') * words_stored
 
     pivot_dt = pd.pivot_table(df,
-                      values='rel_freq',
-                      index=['word'],
-                      columns=['dt'],
-                      aggfunc=np.sum)
+                              values='rel_freq',
+                              index=['word'],
+                              columns=['dt'],
+                              aggfunc=np.sum)
 
     words_to_keep = set()
-    lens = []
     for column in pivot_dt:
         daily_top_words = list(pivot_dt[column]
                                .sort_values(ascending=False)[:10].index.values)
         words_to_keep.update(daily_top_words)
 
     pivot_dtm = pd.pivot_table(df,
-                       values='rel_freq',
-                       index=['word'],
-                       columns=['dtm'],
-                       aggfunc=np.sum)
+                               values='rel_freq',
+                               index=['word'],
+                               columns=['dtm'],
+                               aggfunc=np.sum)
 
     pivot_dtm = pivot_dtm[pivot_dtm.index.isin(words_to_keep)]
     pivot_dtm = pivot_dtm.transpose()
     pivot_dtm = pivot_dtm.fillna(value=0)
-    pivot_dtm = pivot_dtm.applymap(lambda x: int(round(x,4)*10000))
+    pivot_dtm = pivot_dtm.applymap(lambda x: int(round(x, 4)*10000))
     pivot_dtm = pivot_dtm.sort_index(ascending=True)
 
     frontend_dict = {}
