@@ -103,4 +103,5 @@ def insert_words(conn, processed_batch):
 def execute_sql(conn, sql):
     c = conn.cursor()
     c.execute(sql)
+    conn.commit()
     return c.fetchall()

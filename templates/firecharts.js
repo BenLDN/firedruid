@@ -4,14 +4,14 @@ var start_dt = "{{default_start_date}}"
 var end_dt = "{{default_end_date}}"
 var top_n = 5
 
-
+// (RE)CALCULATING CHART DATA ==================================================
 
 function generate_data(start_dt, end_dt, top_n) {
   var i
   var j
   var k
 
-  // adding hour to dates
+  // adding hours to dates
 
   for (i = 0; i < all_data['datetimes'].length; i++) {
     if (all_data['datetimes'][i].slice(0,10) == start_dt) {
@@ -27,25 +27,20 @@ function generate_data(start_dt, end_dt, top_n) {
     }
   }
 
-  // start_dtm = start_dt.concat(" 01")
-  // end_dtm = end_dt.concat(" 15")
-
-
-  // get start and end index based on test datetimes
+  // get start and end index based on datetimes
   start_index = all_data['datetimes'].indexOf(start_dtm)
   end_index = all_data['datetimes'].indexOf(end_dtm)
   no_of_dtms = end_index - start_index
 
-  // get the appropriate slice of all_data['frequencies'], all_data['datetimes'] and all_data['words']
+  // get the appropriate slice of all_data['frequencies'] and all_data['datetimes']
   filtered_freq_lists = all_data['frequencies'].slice(start_index, end_index)
   datetimes = all_data['datetimes'].slice(start_index, end_index)
 
-  // horizontal sum (& div100) frequencies
-
+  // horizontal sum of frequencies
   var sum = (r, a) => r.map((b, i) => a[i] + b)
   total_freqs_over_period = filtered_freq_lists.reduce(sum)
 
-  // determine threshold and create mask
+  // determine threshold and create boolean mask for top words
   total_freqs_over_period_sorted = filtered_freq_lists.reduce(sum)
   total_freqs_over_period_sorted = total_freqs_over_period_sorted.sort(function(a, b) {return a - b;});
   threshold = total_freqs_over_period_sorted[total_freqs_over_period_sorted.length - top_n]
@@ -60,7 +55,7 @@ function generate_data(start_dt, end_dt, top_n) {
     }
   }
 
-  // top10 words
+  // build array for top words
   top_words = []
   for (i = 0; i < all_data['words'].length; i++) {
     if (mask[i]) {
@@ -68,7 +63,7 @@ function generate_data(start_dt, end_dt, top_n) {
     }
   }
 
-  // top10 frequency arrays
+  // build matrix (array of arrays) for frequencies
   top_frequencies = []
 
   for (i = 0; i < filtered_freq_lists.length; i++) {
@@ -89,7 +84,8 @@ function generate_data(start_dt, end_dt, top_n) {
       }
     }
   }
-  // total top top_frequencies (for the bar chart)
+
+  // total top frequencies over the whole period (for the bar chart)
   top_total_freqs_over_period = []
   for (i = 0; i < total_freqs_over_period.length; i++) {
     if (mask[i]) {
@@ -116,7 +112,7 @@ function generate_data(start_dt, end_dt, top_n) {
   })
 
 
-    // create date arrays for the dropdowns
+    // create date arrays for the dropdowns (enforcing star < end)
 
     function onlyUnique(value, index, self) {
       return self.indexOf(value) === index;
@@ -126,8 +122,6 @@ function generate_data(start_dt, end_dt, top_n) {
 
     valid_dt_starts = all_dates.slice(0, all_dates.indexOf(end_dt))
     valid_dt_ends = all_dates.slice(all_dates.indexOf(start_dt) + 1, all_dates.length)
-
-    // update options in select dropdown
 
     function removeOptions(selectElement) {
       var i, L = selectElement.options.length - 1;
@@ -164,9 +158,6 @@ function generate_data(start_dt, end_dt, top_n) {
     end_selector.appendChild(el);
     }
 
-    // selectElement("choose-start", start_dt)
-    // selectElement("choose-end", end_dt)
-
     start_selector.value = start_dt
     end_selector.value = end_dt
     top_selector.value = top_n
@@ -177,11 +168,11 @@ generate_data(start_dt, end_dt, top_n)
 
 Chart.defaults.global.responsive = true;
 
-// INTERACTIVE LINE GRAPH ===============================================================
+// LINE GRAPH ==================================================================
 
 var interactiveLineChartData = {
 
-    labels: datetimes, //app_load_data['hourly']['Last 7 Days']['trend_data_hourly']['time_dim'],
+    labels: datetimes,
 
     datasets: []
 };
@@ -189,7 +180,7 @@ var interactiveLineChartData = {
 for (i = 0; i < top_n; i++) {
 
     dataset = {
-        label: top_words[i], //app_load_data['hourly']['Last 7 Days']['trend_data_hourly']['words'][i],
+        label: top_words[i],
         fill: false,
         lineTension: 0.3,
         borderColor: colourlist[i],
@@ -198,7 +189,7 @@ for (i = 0; i < top_n; i++) {
         pointHoverBorderColor: colourlist[i],
         pointRadius: 0.5,
         pointHitRadius: 15,
-        data: top_frequencies[i] //app_load_data['hourly']['Last 7 Days']['trend_data_hourly']['value_list'][i]
+        data: top_frequencies[i]
     }
 
     interactiveLineChartData.datasets.push(dataset)
@@ -236,7 +227,7 @@ var interactiveLineChart = new Chart(ctx, {
 
 });
 
-// INTERACTIVE BAR CHART ===============================================================
+// BAR CHART ===================================================================
 
 var interactiveBarChartData = {
 
@@ -299,7 +290,7 @@ var interactiveBarChart = new Chart(ctx, {
 
 });
 
-// CHANGE PARAMETERS
+// UPDATING CHARTS AFTER PARAMETERS CHANGE =====================================
 
 function update_everything(start_selected, end_selected, top_seleced) {
 
