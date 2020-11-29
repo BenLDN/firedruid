@@ -25,6 +25,7 @@
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#chart">Charts</a></li>
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#examples">Examples</a></li>
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
+                <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#excluded">Excluded Words</a></li>
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#author">Author</a></li>
             </ul>
         </div>
@@ -55,7 +56,7 @@
               </select>
 
               <label for="choose-top-n" class="col-form-label">&nbsp;&nbsp;Number of words to show:&nbsp;</label>
-              <select style="width: 50px;" class="form-control" name="choose-top-n" id="choose-top-n" onchange=";update_everything(document.getElementById('choose-start').value,
+              <select style="width: 75px;" class="form-control" name="choose-top-n" id="choose-top-n" onchange=";update_everything(document.getElementById('choose-start').value,
                                                                                                                             document.getElementById('choose-end').value,
                                                                                                                             document.getElementById('choose-top-n').value);">
               {%for i in range(3, 11) %}
@@ -135,11 +136,23 @@
                     <a href="https://pandas.pydata.org/" target="_blank">Pandas</a>,
                     <a href="https://www.chartjs.org/" target="_blank">Chart.js</a> <br>
                     Hosted on <a href="https://www.pythonanywhere.com/" target="_blank">PythonAnywhere</a>
+
                 </div>
             </div>
         </section>
         <hr class="m-0" />
 
+        <!-- Excluded-->
+        <section class="resume-section" id="excluded">
+            <div class="resume-section-content">
+                <h2>Excluded Words</h2>
+                <p>The following words are common and their frequencies don't provide insight, therefore they are removed <b>before</b> calculating word frequencies.</p>
+                <p>
+                  {{excluded_words}}
+                </p>
+            </div>
+        </section>
+        <hr class="m-0" />
 
         <!-- Author-->
         <section class="resume-section" id="author">

@@ -22,11 +22,15 @@ def root():
     default_end_date = dates[-1]
     default_start_date = dates[-31]
 
+    with open(config['excluded_words_file'], 'r') as file:
+        excluded_words = ', '.join(sorted(json.load(file)))
+
     return render_template('index.html',
                            all_data=all_data,
                            colourlist=colourlist,
                            default_start_date=default_start_date,
-                           default_end_date=default_end_date)
+                           default_end_date=default_end_date,
+                           excluded_words=excluded_words)
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
