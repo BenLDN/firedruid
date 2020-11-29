@@ -56,12 +56,19 @@ def read_all():
 
 
 def get_frontend_data(words_stored):
+    """
+    Returns:
+    - words that were in the top 10 on any day
+    - all datetimes currently stored in yyyy-mm-dd hh format
+    - frequency matrix with numbers in this format: 0.1234567 -> 1234
+    """
 
     df = read_all()
 
     df['dtm'] = df['dt'] + " " + df['tm'].str[:2]
     df = df[['dt', 'dtm', 'word', 'freq']]
-    df['rel_freq'] = df['freq'] / df.groupby('dtm')['dtm'].transform('count') * words_stored
+    df['rel_freq'] = df['freq']\
+        / df.groupby('dtm')['dtm'].transform('count') * words_stored
 
     pivot_dt = pd.pivot_table(df,
                       values='rel_freq',
@@ -72,7 +79,8 @@ def get_frontend_data(words_stored):
     words_to_keep = set()
     lens = []
     for column in pivot_dt:
-        daily_top_words = list(pivot_dt[column].sort_values(ascending=False)[:10].index.values)
+        daily_top_words = list(pivot_dt[column]
+                               .sort_values(ascending=False)[:10].index.values)
         words_to_keep.update(daily_top_words)
 
     pivot_dtm = pd.pivot_table(df,
@@ -84,7 +92,7 @@ def get_frontend_data(words_stored):
     pivot_dtm = pivot_dtm[pivot_dtm.index.isin(words_to_keep)]
     pivot_dtm = pivot_dtm.transpose()
     pivot_dtm = pivot_dtm.fillna(value=0)
-    pivot_dtm = pivot_dtm.applymap(lambda x: int(str(x)[2:6]))
+    pivot_dtm = pivot_dtm.applymap(lambda x: int(round(x,4)*10000))
     pivot_dtm = pivot_dtm.sort_index(ascending=True)
 
     frontend_dict = {}

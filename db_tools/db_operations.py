@@ -78,7 +78,7 @@ def insert_titles(conn, title_list, scrape_key):
     c.close()
 
 
-def insert_words(conn, processed_batch): # words_tup_list, scrape_key, site, day, hour
+def insert_words(conn, processed_batch):
 
     insert_rows = []
 
@@ -90,11 +90,12 @@ def insert_words(conn, processed_batch): # words_tup_list, scrape_key, site, day
                                 site,
                                 day,
                                 hour,
-                                words_tup[0],
-                                words_tup[1],
-                                words_tup[2]))
+                                words_tup[0], # the word itself
+                                words_tup[1], # frequency
+                                words_tup[2])) # rank
     c = conn.cursor()
-    c.executemany('INSERT INTO words VALUES (?, ?, ?, ?, ?, ?, ?, ?)', insert_rows)
+    c.executemany('INSERT INTO words VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                   insert_rows)
     conn.commit()
     c.close()
 
