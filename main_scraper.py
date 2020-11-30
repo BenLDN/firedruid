@@ -1,3 +1,4 @@
+import logging
 import json
 from datetime import datetime
 import scraper_tools.title_list_scraper as title_list_scraper
@@ -54,6 +55,8 @@ def process_scraped_data(scrape_keys, words_stored):
 
     db_writer.store_words(processed_batch)
 
+    return len(str(processed_batch))
+
 
 def generate_frontend_json(config):
 
@@ -62,13 +65,26 @@ def generate_frontend_json(config):
     with open(config['frontend_data_json'], 'w') as file:
         json.dump(frontend_data, file)
 
+    return len(frontend_data['words']), len(frontend_data['datetimes'])
+
 
 if __name__ == '__main__':
 
+    logging.basicConfig(filename='druidscrape.log',
+                        filemode='a',
+                        format='%(asctime)s - %(message)s',
+                        level=logging.INFO,
+                        datefmt='%Y-%m-%d %H:%M:%S')
+
+    logging.info('---=== main_scraper.py ===---')
     with open('config.json', 'r') as file:
         config = json.load(file)
 
     scrape_keys = scrape_all_sites(config['news_sites_file'])
-    process_scraped_data(scrape_keys, config['words_stored'])
+    logging.info('Number of websites scraped: ' + str(len(scrape_keys)))
 
-    generate_frontend_json(config)
+    payload_size = process_scraped_data(scrape_keys, config['words_stored'])
+    logging.info('Processed data, payload size: ' + str(payload_size))
+
+    no_of_words, no_of_dtm = generate_frontend_json(config)
+    logging.info('JSON generated: ' + str(no_of_words) + ' words and ' + str(no_of_dtm) + ' datetimes')
