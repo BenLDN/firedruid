@@ -1,7 +1,9 @@
 var all_data = {{all_data}}
 var colourlist = {{colourlist}}
 var start_dt = "{{default_start_date}}"
+var start_dt_word = "{{default_start_date}}"
 var end_dt = "{{default_end_date}}"
+var end_dt_word = "{{default_end_date}}"
 var top_n = 5
 
 // (RE)CALCULATING TOP CHART DATA ==============================================
@@ -166,9 +168,127 @@ function generate_data(start_dt, end_dt, top_n) {
 
 generate_data(start_dt, end_dt, top_n)
 
-Chart.defaults.global.responsive = true;
+// (RE)CALCULATING WORD CHART DATA =============================================
+
+function generate_data_word(start_dt_word, end_dt_word, word1, word2, word3) {
+    var i
+    var j
+    var k
+
+    // adding hours to dates
+
+    for (i = 0; i < all_data['datetimes'].length; i++) {
+        if (all_data['datetimes'][i].slice(0, 10) == start_dt_word) {
+            start_dtm_word = all_data['datetimes'][i]
+            break
+        }
+    }
+
+    for (i = all_data['datetimes'].length - 1; i >= 0; i--) {
+        if (all_data['datetimes'][i].slice(0, 10) == end_dt_word) {
+            end_dtm_word = all_data['datetimes'][i]
+            break
+        }
+    }
+
+    // get start and end index based on datetimes
+    start_index_word = all_data['datetimes'].indexOf(start_dtm_word)
+    end_index_word = all_data['datetimes'].indexOf(end_dtm_word)
+    no_of_dtms_word = end_index - start_index_word
+
+    // get the appropriate slice of all_data['frequencies'] and all_data['datetimes']
+    filtered_freq_lists_word = all_data['frequencies'].slice(start_index_word, end_index_word)
+    datetimes_word = all_data['datetimes'].slice(start_index_word, end_index_word)
+
+    // get the indicies of selected words
+    word_indices = []
+    words = []
+    for (const element of [word1, word2, word3]) {
+      words.push(element)
+      word_indices.push(all_data['words'].indexOf(element))
+    }
+
+    console.log(words)
+    console.log(word_indices)
+
+    frequencies_word = []
+
+    for (i = 0; i < filtered_freq_lists.length; i++) {
+        var k = 0
+        freq_list = filtered_freq_lists[i]
+        for (j = 0; j < freq_list.length; j++) {
+            word_freq = freq_list[j]
+            if (word_indices.includes(j)) {
+                if (i == 0) {
+                    frequencies_word.push([word_freq / 100])
+                } else {
+                    frequencies_word[k].push(word_freq / 100)
+                }
+                k++
+            }
+        }
+    }
+
+    console.log(frequencies_word)
+
+    // create date arrays for the dropdowns (enforcing star < end)
+
+    function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+    }
+
+    all_dates = all_data['datetimes'].map((dtm) => dtm.slice(0, 10)).filter(onlyUnique)
+
+    valid_dt_starts_word = all_dates.slice(0, all_dates.indexOf(end_dt_word))
+    valid_dt_ends_word = all_dates.slice(all_dates.indexOf(start_dt_word) + 1, all_dates.length)
+
+    function removeOptions(selectElement) {
+        var i, L = selectElement.options.length - 1;
+        for (i = L; i >= 0; i--) {
+            selectElement.remove(i);
+        }
+    }
+
+    function selectElement(id, valueToSelect) {
+        let element = document.getElementById(id);
+        element.value = valueToSelect;
+    }
+
+    start_selector_word = document.getElementById("choose-start-word")
+    end_selector_word = document.getElementById("choose-end-word")
+    word_selector1 = document.getElementById("choose-word1")
+    word_selector2 = document.getElementById("choose-word2")
+    word_selector3 = document.getElementById("choose-word3")
+
+    removeOptions(start_selector_word)
+    removeOptions(end_selector_word)
+
+    for (var i = 0; i < valid_dt_starts_word.length; i++) {
+        var opt = valid_dt_starts_word[i];
+        var el = document.createElement("option");
+        el.textContent = opt;
+        el.value = opt;
+        start_selector_word.appendChild(el);
+    }
+
+    for (var i = 0; i < valid_dt_ends_word.length; i++) {
+        var opt = valid_dt_ends_word[i];
+        var el = document.createElement("option");
+        el.textContent = opt;
+        el.value = opt;
+        end_selector_word.appendChild(el);
+    }
+
+    start_selector_word.value = start_dt_word
+    end_selector_word.value = end_dt_word
+
+}
+
+generate_data_word(start_dt_word, end_dt_word, 'biden', 'trump', 'covid')
 
 // TOP LINE GRAPH ==============================================================
+
+Chart.defaults.global.responsive = true;
 
 var interactiveLineChartData = {
 
@@ -294,15 +414,15 @@ var interactiveBarChart = new Chart(ctx, {
 
 var interactiveLineChartWordData = {
 
-    labels: datetimes,
+    labels: datetimes_word,
 
     datasets: []
 };
 
-for (i = 0; i < top_n; i++) {
+for (i = 0; i < 3; i++) {
 
     dataset = {
-        label: top_words[i],
+        label: words[i],
         fill: false,
         lineTension: 0.3,
         borderColor: colourlist[i],
@@ -311,7 +431,7 @@ for (i = 0; i < top_n; i++) {
         pointHoverBorderColor: colourlist[i],
         pointRadius: 0.5,
         pointHitRadius: 15,
-        data: top_frequencies[i]
+        data: frequencies_word[i]
     }
 
     interactiveLineChartWordData.datasets.push(dataset)
@@ -327,7 +447,7 @@ var interactiveLineChartWord = new Chart(ctx, {
 
         title: {
             display: true,
-            text: 'Word frequency (testing)'
+            text: 'Word frequencies'
         },
 
         scales: {
@@ -378,5 +498,33 @@ function update_everything(start_selected, end_selected, top_seleced) {
         interactiveLineChartData.datasets.push(dataset)
     }
     interactiveLineChart.update()
+    //
+}
+
+// UPDATING WORD CHARTS AFTER PARAMETERS CHANGE ================================
+
+function update_everything_word(start_selected_word, end_selected_word, word1, word2, word3) {
+
+    generate_data_word(start_selected, end_selected, word1, word2, word3)
+    //
+
+    interactiveLineChartWord.data.labels = datetimes
+    interactiveLineChartWordData.datasets = []
+    for (i = 0; i < 3; i++) {
+        dataset = {
+            label: words[i],
+            fill: false,
+            lineTension: 0.3,
+            borderColor: colourlist[i],
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: colourlist[i],
+            pointHoverBorderColor: colourlist[i],
+            pointRadius: 1,
+            pointHitRadius: 15,
+            data: frequencies_word[i]
+        }
+        interactiveLineChartWordData.datasets.push(dataset)
+    }
+    interactiveLineChartWord.update()
     //
 }
