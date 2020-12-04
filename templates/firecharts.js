@@ -204,18 +204,17 @@ function generate_data_word(start_dt_word, end_dt_word, word1, word2, word3) {
     word_indices = []
     words = []
     for (const element of [word1, word2, word3]) {
-      words.push(element)
-      word_indices.push(all_data['words'].indexOf(element))
+      if (element != "(select word)") {
+        words.push(element)
+        word_indices.push(all_data['words'].indexOf(element))
+      }
     }
-
-    console.log(words)
-    console.log(word_indices)
 
     frequencies_word = []
 
-    for (i = 0; i < filtered_freq_lists.length; i++) {
+    for (i = 0; i < filtered_freq_lists_word.length; i++) {
         var k = 0
-        freq_list = filtered_freq_lists[i]
+        freq_list = filtered_freq_lists_word[i]
         for (j = 0; j < freq_list.length; j++) {
             word_freq = freq_list[j]
             if (word_indices.includes(j)) {
@@ -228,8 +227,6 @@ function generate_data_word(start_dt_word, end_dt_word, word1, word2, word3) {
             }
         }
     }
-
-    console.log(frequencies_word)
 
     // create date arrays for the dropdowns (enforcing star < end)
 
@@ -262,6 +259,9 @@ function generate_data_word(start_dt_word, end_dt_word, word1, word2, word3) {
 
     removeOptions(start_selector_word)
     removeOptions(end_selector_word)
+    removeOptions(word_selector1)
+    removeOptions(word_selector2)
+    removeOptions(word_selector3)
 
     for (var i = 0; i < valid_dt_starts_word.length; i++) {
         var opt = valid_dt_starts_word[i];
@@ -279,12 +279,54 @@ function generate_data_word(start_dt_word, end_dt_word, word1, word2, word3) {
         end_selector_word.appendChild(el);
     }
 
+    el = document.createElement("option")
+    el.textContent = "(select word)"
+    el.value = "(select word)"
+    word_selector1.appendChild(el)
+
+    for (var i = 0; i < all_data['words'].length; i++) {
+        var opt = all_data['words'][i];
+        var el = document.createElement("option");
+        el.textContent = opt;
+        el.value = opt;
+        word_selector1.appendChild(el);
+    }
+
+    el = document.createElement("option")
+    el.textContent = "(select word)"
+    el.value = "(select word)"
+    word_selector2.appendChild(el)
+
+    for (var i = 0; i < all_data['words'].length; i++) {
+        var opt = all_data['words'][i];
+        var el = document.createElement("option");
+        el.textContent = opt;
+        el.value = opt;
+        word_selector2.appendChild(el);
+    }
+
+    el = document.createElement("option")
+    el.textContent = "(select word)"
+    el.value = "(select word)"
+    word_selector3.appendChild(el)
+
+    for (var i = 0; i < all_data['words'].length; i++) {
+        var opt = all_data['words'][i];
+        var el = document.createElement("option");
+        el.textContent = opt;
+        el.value = opt;
+        word_selector3.appendChild(el);
+    }
+
     start_selector_word.value = start_dt_word
     end_selector_word.value = end_dt_word
+    word_selector1.value = word1
+    word_selector2.value = word2
+    word_selector3.value = word3
 
 }
 
-generate_data_word(start_dt_word, end_dt_word, 'biden', 'trump', 'covid')
+generate_data_word(start_dt_word, end_dt_word, "(select word)", "(select word)", "(select word)")
 
 // TOP LINE GRAPH ==============================================================
 
@@ -419,7 +461,7 @@ var interactiveLineChartWordData = {
     datasets: []
 };
 
-for (i = 0; i < 3; i++) {
+for (i = 0; i < words.length; i++) {
 
     dataset = {
         label: words[i],
@@ -505,12 +547,17 @@ function update_everything(start_selected, end_selected, top_seleced) {
 
 function update_everything_word(start_selected_word, end_selected_word, word1, word2, word3) {
 
-    generate_data_word(start_selected, end_selected, word1, word2, word3)
-    //
+    console.log(start_selected_word)
 
-    interactiveLineChartWord.data.labels = datetimes
+    generate_data_word(start_selected_word, end_selected_word, word1, word2, word3)
+    //
+    console.log(datetimes)
+    console.log(words)
+    console.log(frequencies_word)
+
+    interactiveLineChartWord.data.labels = datetimes_word
     interactiveLineChartWordData.datasets = []
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < words.length; i++) {
         dataset = {
             label: words[i],
             fill: false,

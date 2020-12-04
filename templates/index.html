@@ -24,6 +24,7 @@
             <ul class="navbar-nav">
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#chart">Charts</a></li>
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#word">Word Chart</a></li>
+                <li class="nav-item">------------</li>
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#examples">Examples</a></li>
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
                 <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#excluded">Excluded Words</a></li>
@@ -91,16 +92,16 @@
               <label for="choose-start-word" class="col-form-label">&nbsp;&nbsp;Period start date:&nbsp;</label>
               <select style="width: 150px;" class="form-control" name="choose-start-word" id="choose-start-word" onchange=";update_everything_word(document.getElementById('choose-start-word').value,
                                                                                                                                                    document.getElementById('choose-end-word').value,
-                                                                                                                                                   document.getElementById('choose-word1').value),
-                                                                                                                                                   document.getElementById('choose-word2').value),
+                                                                                                                                                   document.getElementById('choose-word1').value,
+                                                                                                                                                   document.getElementById('choose-word2').value,
                                                                                                                                                    document.getElementById('choose-word3').value);">
               </select>
 
               <label for="choose-end-word" class="col-form-label">&nbsp;&nbsp;Period end date:&nbsp;</label>
               <select style="width: 150px;" class="form-control" name="choose-end-word" id="choose-end-word" onchange=";update_everything_word(document.getElementById('choose-start-word').value,
                                                                                                                                                document.getElementById('choose-end-word').value,
-                                                                                                                                               document.getElementById('choose-word1').value),
-                                                                                                                                               document.getElementById('choose-word2').value),
+                                                                                                                                               document.getElementById('choose-word1').value,
+                                                                                                                                               document.getElementById('choose-word2').value,
                                                                                                                                                document.getElementById('choose-word3').value);">
               </select>
               </div>
@@ -110,8 +111,8 @@
               <label for="choose-word1" class="col-form-label">&nbsp;&nbsp;Words to show:&nbsp;</label>
               <select style="width: 250px;" class="form-control" name="choose-word1" id="choose-word1" onchange=";update_everything_word(document.getElementById('choose-start-word').value,
                                                                                                                                          document.getElementById('choose-end-word').value,
-                                                                                                                                         document.getElementById('choose-word1').value),
-                                                                                                                                         document.getElementById('choose-word2').value),
+                                                                                                                                         document.getElementById('choose-word1').value,
+                                                                                                                                         document.getElementById('choose-word2').value,
                                                                                                                                          document.getElementById('choose-word3').value);">
               {%for i in ['christmas', 'biden', 'trump'] %}
               <option value="{{i}}" {% if i == default_top_n %}{{ "selected" }}{% endif %}>{{i}}</option>
@@ -120,8 +121,8 @@
 
               <select style="width: 250px;" class="form-control" name="choose-word2" id="choose-word2" onchange=";update_everything_word(document.getElementById('choose-start-word').value,
                                                                                                                                          document.getElementById('choose-end-word').value,
-                                                                                                                                         document.getElementById('choose-word1').value),
-                                                                                                                                         document.getElementById('choose-word2').value),
+                                                                                                                                         document.getElementById('choose-word1').value,
+                                                                                                                                         document.getElementById('choose-word2').value,
                                                                                                                                          document.getElementById('choose-word3').value);">
               {%for i in ['christmas', 'biden', 'trump'] %}
               <option value="{{i}}" {% if i == default_top_n %}{{ "selected" }}{% endif %}>{{i}}</option>
@@ -130,8 +131,8 @@
 
               <select style="width: 250px;" class="form-control" name="choose-word3" id="choose-word3" onchange=";update_everything_word(document.getElementById('choose-start-word').value,
                                                                                                                                          document.getElementById('choose-end-word').value,
-                                                                                                                                         document.getElementById('choose-word1').value),
-                                                                                                                                         document.getElementById('choose-word2').value),
+                                                                                                                                         document.getElementById('choose-word1').value,
+                                                                                                                                         document.getElementById('choose-word2').value,
                                                                                                                                          document.getElementById('choose-word3').value);">
               {%for i in ['christmas', 'biden', 'trump'] %}
               <option value="{{i}}" {% if i == default_top_n %}{{ "selected" }}{% endif %}>{{i}}</option>
