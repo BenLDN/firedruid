@@ -4,7 +4,7 @@ var start_dt = "{{default_start_date}}"
 var end_dt = "{{default_end_date}}"
 var top_n = 5
 
-// (RE)CALCULATING CHART DATA ==================================================
+// (RE)CALCULATING TOP CHART DATA ==============================================
 
 function generate_data(start_dt, end_dt, top_n) {
     var i
@@ -168,7 +168,7 @@ generate_data(start_dt, end_dt, top_n)
 
 Chart.defaults.global.responsive = true;
 
-// LINE GRAPH ==================================================================
+// TOP LINE GRAPH ==============================================================
 
 var interactiveLineChartData = {
 
@@ -205,7 +205,7 @@ var interactiveLineChart = new Chart(ctx, {
 
         title: {
             display: true,
-            text: 'Word frequency (testing)'
+            text: 'Word frequency over time'
         },
 
         scales: {
@@ -227,7 +227,7 @@ var interactiveLineChart = new Chart(ctx, {
 
 });
 
-// BAR CHART ===================================================================
+// TOP BAR CHART ===============================================================
 
 var interactiveBarChartData = {
 
@@ -255,7 +255,7 @@ var interactiveBarChart = new Chart(ctx, {
 
         title: {
             display: true,
-            text: 'Word frequency (testing)'
+            text: 'Total word frequency in period'
         },
 
         tooltips: {
@@ -289,6 +289,66 @@ var interactiveBarChart = new Chart(ctx, {
     }
 
 });
+
+// WORD LINE GRAPH ==============================================================
+
+var interactiveLineChartWordData = {
+
+    labels: datetimes,
+
+    datasets: []
+};
+
+for (i = 0; i < top_n; i++) {
+
+    dataset = {
+        label: top_words[i],
+        fill: false,
+        lineTension: 0.3,
+        borderColor: colourlist[i],
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: colourlist[i],
+        pointHoverBorderColor: colourlist[i],
+        pointRadius: 0.5,
+        pointHitRadius: 15,
+        data: top_frequencies[i]
+    }
+
+    interactiveLineChartWordData.datasets.push(dataset)
+}
+
+var ctx = document.getElementById("interactiveLineChartWord").getContext("2d");
+
+var interactiveLineChartWord = new Chart(ctx, {
+    type: 'line',
+    data: interactiveLineChartWordData,
+    options: {
+        maintainAspectRatio: false,
+
+        title: {
+            display: true,
+            text: 'Word frequency (testing)'
+        },
+
+        scales: {
+
+            yAxes: [{
+                ticks: {
+
+                    min: 0,
+                    callback: function(value) {
+                        return value.toFixed(2) + "%"
+                    }
+                },
+                scaleLabel: {
+                    display: false,
+                }
+            }]
+        }
+    }
+
+});
+
 
 // UPDATING CHARTS AFTER PARAMETERS CHANGE =====================================
 
