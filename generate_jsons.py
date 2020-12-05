@@ -116,7 +116,9 @@ excluded_words = ['the', 'be', 'is', 'am', 'are', 'was',
                   'why', 'off', 'more', 'show', 'ever', 'need', 'should',
                   'taking', 'got', 'everything', 'every', 'best', 'news',
                   '2020', '2021', 'week', 'star', 'day', 'life',
-                  'man', 'woman', '000'
+                  'man', 'woman', '000', 'bbc', 'call', 'city', 'claim',
+                  'during', 'hit', 'home', 'latest', 'live', 'month', 'mum',
+                  'next', 'plan', 'world', 'top', 'street', 'set'
                   ]
 
 
