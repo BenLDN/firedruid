@@ -114,9 +114,7 @@
                                                                                                                                          document.getElementById('choose-word1').value,
                                                                                                                                          document.getElementById('choose-word2').value,
                                                                                                                                          document.getElementById('choose-word3').value);">
-              {%for i in ['christmas', 'biden', 'trump'] %}
-              <option value="{{i}}" {% if i == default_top_n %}{{ "selected" }}{% endif %}>{{i}}</option>
-              {% endfor %}
+              <option value="(select word)" "selected">(select word)</option>
               </select>
 
               <select style="width: 250px;" class="form-control" name="choose-word2" id="choose-word2" onchange=";update_everything_word(document.getElementById('choose-start-word').value,
@@ -124,9 +122,7 @@
                                                                                                                                          document.getElementById('choose-word1').value,
                                                                                                                                          document.getElementById('choose-word2').value,
                                                                                                                                          document.getElementById('choose-word3').value);">
-              {%for i in ['christmas', 'biden', 'trump'] %}
-              <option value="{{i}}" {% if i == default_top_n %}{{ "selected" }}{% endif %}>{{i}}</option>
-              {% endfor %}
+              <option value="(select word)" "selected">(select word)</option>
               </select>
 
               <select style="width: 250px;" class="form-control" name="choose-word3" id="choose-word3" onchange=";update_everything_word(document.getElementById('choose-start-word').value,
@@ -134,9 +130,7 @@
                                                                                                                                          document.getElementById('choose-word1').value,
                                                                                                                                          document.getElementById('choose-word2').value,
                                                                                                                                          document.getElementById('choose-word3').value);">
-              {%for i in ['christmas', 'biden', 'trump'] %}
-              <option value="{{i}}" {% if i == default_top_n %}{{ "selected" }}{% endif %}>{{i}}</option>
-              {% endfor %}
+              <option value="(select word)" "selected">(select word)</option>
               </select>
               </div>
 

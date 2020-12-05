@@ -228,7 +228,7 @@ function generate_data_word(start_dt_word, end_dt_word, word1, word2, word3) {
         }
     }
 
-    // create date arrays for the dropdowns (enforcing star < end)
+    words.sort()
 
     function onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
@@ -253,15 +253,9 @@ function generate_data_word(start_dt_word, end_dt_word, word1, word2, word3) {
 
     start_selector_word = document.getElementById("choose-start-word")
     end_selector_word = document.getElementById("choose-end-word")
-    word_selector1 = document.getElementById("choose-word1")
-    word_selector2 = document.getElementById("choose-word2")
-    word_selector3 = document.getElementById("choose-word3")
 
     removeOptions(start_selector_word)
     removeOptions(end_selector_word)
-    removeOptions(word_selector1)
-    removeOptions(word_selector2)
-    removeOptions(word_selector3)
 
     for (var i = 0; i < valid_dt_starts_word.length; i++) {
         var opt = valid_dt_starts_word[i];
@@ -279,53 +273,51 @@ function generate_data_word(start_dt_word, end_dt_word, word1, word2, word3) {
         end_selector_word.appendChild(el);
     }
 
-    el = document.createElement("option")
-    el.textContent = "(select word)"
-    el.value = "(select word)"
-    word_selector1.appendChild(el)
-
-    for (var i = 0; i < all_data['words'].length; i++) {
-        var opt = all_data['words'][i];
-        var el = document.createElement("option");
-        el.textContent = opt;
-        el.value = opt;
-        word_selector1.appendChild(el);
-    }
-
-    el = document.createElement("option")
-    el.textContent = "(select word)"
-    el.value = "(select word)"
-    word_selector2.appendChild(el)
-
-    for (var i = 0; i < all_data['words'].length; i++) {
-        var opt = all_data['words'][i];
-        var el = document.createElement("option");
-        el.textContent = opt;
-        el.value = opt;
-        word_selector2.appendChild(el);
-    }
-
-    el = document.createElement("option")
-    el.textContent = "(select word)"
-    el.value = "(select word)"
-    word_selector3.appendChild(el)
-
-    for (var i = 0; i < all_data['words'].length; i++) {
-        var opt = all_data['words'][i];
-        var el = document.createElement("option");
-        el.textContent = opt;
-        el.value = opt;
-        word_selector3.appendChild(el);
-    }
-
     start_selector_word.value = start_dt_word
     end_selector_word.value = end_dt_word
-    word_selector1.value = word1
-    word_selector2.value = word2
-    word_selector3.value = word3
+
 
 }
 
+// Load word list and add elements to word dropdowns
+
+function load_word_dopdown() {
+
+  word_selector1 = document.getElementById("choose-word1")
+  word_selector2 = document.getElementById("choose-word2")
+  word_selector3 = document.getElementById("choose-word3")
+
+  for (var i = 0; i < all_data['words'].length; i++) {
+      var opt = all_data['words'][i];
+      var el = document.createElement("option");
+      el.textContent = opt;
+      el.value = opt;
+      word_selector1.appendChild(el);
+  }
+
+  for (var i = 0; i < all_data['words'].length; i++) {
+      var opt = all_data['words'][i];
+      var el = document.createElement("option");
+      el.textContent = opt;
+      el.value = opt;
+      word_selector2.appendChild(el);
+  }
+
+  for (var i = 0; i < all_data['words'].length; i++) {
+      var opt = all_data['words'][i];
+      var el = document.createElement("option");
+      el.textContent = opt;
+      el.value = opt;
+      word_selector3.appendChild(el);
+  }
+
+  word_selector1.value = "(select word)"
+  word_selector2.value = "(select word)"
+  word_selector3.value = "(select word)"
+
+}
+
+load_word_dopdown()
 generate_data_word(start_dt_word, end_dt_word, "(select word)", "(select word)", "(select word)")
 
 // TOP LINE GRAPH ==============================================================
@@ -547,13 +539,8 @@ function update_everything(start_selected, end_selected, top_seleced) {
 
 function update_everything_word(start_selected_word, end_selected_word, word1, word2, word3) {
 
-    console.log(start_selected_word)
-
     generate_data_word(start_selected_word, end_selected_word, word1, word2, word3)
     //
-    console.log(datetimes)
-    console.log(words)
-    console.log(frequencies_word)
 
     interactiveLineChartWord.data.labels = datetimes_word
     interactiveLineChartWordData.datasets = []
