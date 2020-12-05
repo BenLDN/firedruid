@@ -37,7 +37,7 @@
     <!-- Page Content-->
     <div class="container-fluid p-0">
 
-      <!-- Interactive Charts-->
+      <!-- Top Charts-->
       <section class="resume-section" id="chart">
           <div class="resume-section-content">
               <h2>Charts</h2>
@@ -45,22 +45,22 @@
               Select the start and end date of the period and the number of words you want to see.
               </p>
               <div class="row">
-              <label for="choose-start" class="col-form-label">&nbsp;&nbsp;Period start date:&nbsp;</label>
-              <select style="width: 150px;" class="form-control" name="choose-start" id="choose-start" onchange=";update_everything(document.getElementById('choose-start').value,
-                                                                                                                                          document.getElementById('choose-end').value,
-                                                                                                                                          document.getElementById('choose-top-n').value);">
+              <label for="choose-top-start" class="col-form-label">&nbsp;&nbsp;Period start date:&nbsp;</label>
+              <select style="width: 150px;" class="form-control" name="choose-top-start" id="choose-top-start" onchange=";update_top_chart(document.getElementById('choose-top-start').value,
+                                                                                                                                           document.getElementById('choose-top-end').value,
+                                                                                                                                           document.getElementById('choose-top-n').value);">
               </select>
 
-              <label for="choose-end" class="col-form-label">&nbsp;&nbsp;Period end date:&nbsp;</label>
-              <select style="width: 150px;" class="form-control" name="choose-end" id="choose-end" onchange=";update_everything(document.getElementById('choose-start').value,
-                                                                                                                                   document.getElementById('choose-end').value,
-                                                                                                                                   document.getElementById('choose-top-n').value);">
+              <label for="choose-top-end" class="col-form-label">&nbsp;&nbsp;Period end date:&nbsp;</label>
+              <select style="width: 150px;" class="form-control" name="choose-top-end" id="choose-top-end" onchange=";update_top_chart(document.getElementById('choose-top-start').value,
+                                                                                                                                       document.getElementById('choose-top-end').value,
+                                                                                                                                       document.getElementById('choose-top-n').value);">
               </select>
 
               <label for="choose-top-n" class="col-form-label">&nbsp;&nbsp;Number of words to show:&nbsp;</label>
-              <select style="width: 75px;" class="form-control" name="choose-top-n" id="choose-top-n" onchange=";update_everything(document.getElementById('choose-start').value,
-                                                                                                                            document.getElementById('choose-end').value,
-                                                                                                                            document.getElementById('choose-top-n').value);">
+              <select style="width: 75px;" class="form-control" name="choose-top-n" id="choose-top-n" onchange=";update_top_chart(document.getElementById('choose-top-start').value,
+                                                                                                                                  document.getElementById('choose-top-end').value,
+                                                                                                                                  document.getElementById('choose-top-n').value);">
               {%for i in range(3, 11) %}
               <option value="{{i}}" {% if i == default_top_n %}{{ "selected" }}{% endif %}>{{i}}</option>
               {% endfor %}
@@ -69,67 +69,67 @@
               <br><br>
 
               <div class="row">
-                  <!-- Trends chart-->
+                  <!-- Line chart-->
                   <div class="col-sm">
-                      <canvas id="interactiveLineChart" width="500px" height="500px"></canvas>
+                      <canvas id="topLineChart" width="500px" height="500px"></canvas>
                   </div>
                   <!-- Bar chart-->
                   <div class="col-sm-4">
-                      <canvas id="interactiveBarChart" width="500px" height="500px"></canvas>
+                      <canvas id="topBarChart" width="500px" height="500px"></canvas>
                   </div>
               </div>
           </div>
       </section>
       <hr class="m-0" />
 
-      <!-- Word Chart-->
+      <!-- Custom Chart-->
       <section class="resume-section" id="word">
           <div class="resume-section-content">
               <h2>Word Chart</h2>
               <p>test
               </p>
               <div class="row">
-              <label for="choose-start-word" class="col-form-label">&nbsp;&nbsp;Period start date:&nbsp;</label>
-              <select style="width: 150px;" class="form-control" name="choose-start-word" id="choose-start-word" onchange=";update_everything_word(document.getElementById('choose-start-word').value,
-                                                                                                                                                   document.getElementById('choose-end-word').value,
-                                                                                                                                                   document.getElementById('choose-word1').value,
-                                                                                                                                                   document.getElementById('choose-word2').value,
-                                                                                                                                                   document.getElementById('choose-word3').value);">
+              <label for="choose-custom-start" class="col-form-label">&nbsp;&nbsp;Period start date:&nbsp;</label>
+              <select style="width: 150px;" class="form-control" name="choose-custom-start" id="choose-custom-start" onchange=";update_custom_chart(document.getElementById('choose-custom-start').value,
+                                                                                                                                                    document.getElementById('choose-custom-end').value,
+                                                                                                                                                    document.getElementById('choose-word1').value,
+                                                                                                                                                    document.getElementById('choose-word2').value,
+                                                                                                                                                    document.getElementById('choose-word3').value);">
               </select>
 
-              <label for="choose-end-word" class="col-form-label">&nbsp;&nbsp;Period end date:&nbsp;</label>
-              <select style="width: 150px;" class="form-control" name="choose-end-word" id="choose-end-word" onchange=";update_everything_word(document.getElementById('choose-start-word').value,
-                                                                                                                                               document.getElementById('choose-end-word').value,
-                                                                                                                                               document.getElementById('choose-word1').value,
-                                                                                                                                               document.getElementById('choose-word2').value,
-                                                                                                                                               document.getElementById('choose-word3').value);">
+              <label for="choose-custom-end" class="col-form-label">&nbsp;&nbsp;Period end date:&nbsp;</label>
+              <select style="width: 150px;" class="form-control" name="choose-custom-end" id="choose-custom-end" onchange=";update_custom_chart(document.getElementById('choose-custom-start').value,
+                                                                                                                                                document.getElementById('choose-custom-end').value,
+                                                                                                                                                document.getElementById('choose-word1').value,
+                                                                                                                                                document.getElementById('choose-word2').value,
+                                                                                                                                                document.getElementById('choose-word3').value);">
               </select>
               </div>
               <br>
 
               <div class="row">
               <label for="choose-word1" class="col-form-label">&nbsp;&nbsp;Words to show:&nbsp;</label>
-              <select style="width: 250px;" class="form-control" name="choose-word1" id="choose-word1" onchange=";update_everything_word(document.getElementById('choose-start-word').value,
-                                                                                                                                         document.getElementById('choose-end-word').value,
-                                                                                                                                         document.getElementById('choose-word1').value,
-                                                                                                                                         document.getElementById('choose-word2').value,
-                                                                                                                                         document.getElementById('choose-word3').value);">
+              <select style="width: 250px;" class="form-control" name="choose-word1" id="choose-word1" onchange=";update_custom_chart(document.getElementById('choose-custom-start').value,
+                                                                                                                                      document.getElementById('choose-custom-end').value,
+                                                                                                                                      document.getElementById('choose-word1').value,
+                                                                                                                                      document.getElementById('choose-word2').value,
+                                                                                                                                      document.getElementById('choose-word3').value);">
               <option value="(select word)" "selected">(select word)</option>
               </select>
 
-              <select style="width: 250px;" class="form-control" name="choose-word2" id="choose-word2" onchange=";update_everything_word(document.getElementById('choose-start-word').value,
-                                                                                                                                         document.getElementById('choose-end-word').value,
-                                                                                                                                         document.getElementById('choose-word1').value,
-                                                                                                                                         document.getElementById('choose-word2').value,
-                                                                                                                                         document.getElementById('choose-word3').value);">
+              <select style="width: 250px;" class="form-control" name="choose-word2" id="choose-word2" onchange=";update_custom_chart(document.getElementById('choose-custom-start').value,
+                                                                                                                                      document.getElementById('choose-custom-end').value,
+                                                                                                                                      document.getElementById('choose-word1').value,
+                                                                                                                                      document.getElementById('choose-word2').value,
+                                                                                                                                      document.getElementById('choose-word3').value);">
               <option value="(select word)" "selected">(select word)</option>
               </select>
 
-              <select style="width: 250px;" class="form-control" name="choose-word3" id="choose-word3" onchange=";update_everything_word(document.getElementById('choose-start-word').value,
-                                                                                                                                         document.getElementById('choose-end-word').value,
-                                                                                                                                         document.getElementById('choose-word1').value,
-                                                                                                                                         document.getElementById('choose-word2').value,
-                                                                                                                                         document.getElementById('choose-word3').value);">
+              <select style="width: 250px;" class="form-control" name="choose-word3" id="choose-word3" onchange=";update_custom_chart(document.getElementById('choose-custom-start').value,
+                                                                                                                                      document.getElementById('choose-custom-end').value,
+                                                                                                                                      document.getElementById('choose-word1').value,
+                                                                                                                                      document.getElementById('choose-word2').value,
+                                                                                                                                      document.getElementById('choose-word3').value);">
               <option value="(select word)" "selected">(select word)</option>
               </select>
               </div>
@@ -137,8 +137,8 @@
               <br><br>
 
               <div class="row">
-                  <!-- Trends chart-->
-                      <canvas id="interactiveLineChartWord" width="750px" height="500px"></canvas>
+                  <!-- Line chart-->
+                  <canvas id="customLineChart" width="750px" height="500px"></canvas>
               </div>
           </div>
       </section>
