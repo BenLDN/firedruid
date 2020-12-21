@@ -160,8 +160,10 @@
     "name": "week",
     "rules": [
       [
-        "h3",
-        0
+        0,
+        {
+          "class": "screen-reader-text"
+        }
       ]
     ]
   },
